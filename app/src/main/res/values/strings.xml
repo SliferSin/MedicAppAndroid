@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">E-Consult</string>
+    <string name="icon_cita">Pedir cita</string>
+    <string name="icon_historial">Consultar historial</string>
+</resources>
