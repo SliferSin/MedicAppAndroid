@@ -1,6 +1,6 @@
 package alberto.medicconsultapp;
 
-import android.os.AsyncTask;
+import android.os.AsyncTask; //Tareas async
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,7 +8,10 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -23,7 +26,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity {
+
+    private String TAG = MainActivity.class.getSimpleName();
+
     EditText DNI;
     EditText Password;
     Button sendButton;
@@ -42,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void Loguear(View view) {
         String formDatos = DNI.getText().toString();
-        //String passEnc = AESCrypt.encrypt("sadsd");
+        //AESCrypt passEnc = AESCrypt.encrypt("sadsd");
         new  HttpASync().execute("");
     }
 
@@ -77,25 +86,66 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String ... params){
-            try {
+            //try {
 
-                URL url = new URL("http://192.168.1.11:155");
-                HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
-                urlConnection.setRequestMethod("GET");
+                JSONParser js = new JSONParser();
+                String jsonStr = js.getJSONFromUrl("http://192.168.1.11:155");
+
+                if (jsonStr != null){
+                    try{
+                        JSONObject jsonObj = new JSONObject(jsonStr);
+                        //Getting JSON Array node
+                        JSONArray users = jsonObj.getJSONArray("users");
+
+                        //looping through All Users
+                        for(int i = 0;i <users.length();i++){
+                            JSONObject c = users.getJSONObject(i);
+
+                            String nom = c.getString("nom");
+                            String cognom = c.getString("cognom");
+                            String edat = c.getString("edat");
+                        }
+                    }catch (JSONException e){
+                        Log.e(TAG,"JSON parsing error: " + e.getMessage());
+                    }
+                }
+                else{
+                    Log.e(TAG,"Couldn't get JSON from server");
+                }
+                return null;
+                //URL url = new URL("http://192.168.1.11:155");
+                //HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
+
+                /*InputStream stream = new BufferedInputStream(urlConnection.getInputStream());
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream));
+                StringBuilder builder = new StringBuilder();
+
+                String inputString;
+                while((inputString = bufferedReader.readLine()) != null){
+                    builder.append(inputString);
+                }
+                JSONObject toplevel = new JSONObject(builder.toString());
+                JSONObject main = toplevel.getJSONObject("main");
+
+                urlConnection.disconnect();*/
+
+
+
+                /*urlConnection.setRequestMethod("GET");
                 urlConnection.setDoInput(true);
                 urlConnection.connect();
                 msg = readStream(urlConnection.getInputStream(),500);
-                urlConnection.disconnect();
+                urlConnection.disconnect();*/
 
-            }
+            /*}
             catch(MalformedURLException ex){
 
                 System.out.println(ex);
             }
-            catch(IOException ex){
-                System.out.println(ex);
-            }
-            return msg;
+            catch(IOException | JSONException ex){
+                System.out.println(ex);*/
+            //}
+            //return msg;
         }
         @Override
         protected void onPostExecute(String result){
