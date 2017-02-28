@@ -93,18 +93,19 @@ public class MainActivity extends AppCompatActivity {
 
                 if (jsonStr != null){
                     try{
-                        JSONObject jsonObj = new JSONObject(jsonStr);
+                        //JSONObject jsonObj = new JSONObject(jsonStr);
+                        JSONObject c = new JSONObject(jsonStr);
                         //Getting JSON Array node
-                        JSONArray users = jsonObj.getJSONArray("users");
+                        //JSONArray users = jsonObj.getJSONArray("users");
 
                         //looping through All Users
-                        for(int i = 0;i <users.length();i++){
-                            JSONObject c = users.getJSONObject(i);
+                        //for(int i = 0;i <users.length();i++){
+                            //JSONObject c = users.getJSONObject(i);
 
-                            String nom = c.getString("nom");
-                            String cognom = c.getString("cognom");
-                            String edat = c.getString("edat");
-                        }
+                            String nom = c.getString("Nom");
+                            //String cognom = c.getString("cognom");
+                            String edat = c.getString("Edat");
+                        //}
                     }catch (JSONException e){
                         Log.e(TAG,"JSON parsing error: " + e.getMessage());
                     }
