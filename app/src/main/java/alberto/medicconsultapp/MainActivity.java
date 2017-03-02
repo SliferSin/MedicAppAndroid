@@ -9,9 +9,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
+import android.content.Intent; //Pasar datos a otras activities
+
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONException;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -26,12 +29,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private String TAG = MainActivity.class.getSimpleName();
+    protected Boolean validate = false;
+    protected String nom = "";
 
     EditText DNI;
     EditText Password;
@@ -51,8 +55,15 @@ public class MainActivity extends AppCompatActivity {
     }
     public void Loguear(View view) {
         String formDatos = DNI.getText().toString();
+        Intent intentMenu;
+        intentMenu = new Intent(this,MenuActivity.class);
+
         //AESCrypt passEnc = AESCrypt.encrypt("sadsd");
         new  HttpASync().execute("");
+
+        if(validate) // Lanza el menú si el loggin es correcto
+            intentMenu.putExtra("name",nom);
+            startActivity(intentMenu);
     }
 
     /**
@@ -102,9 +113,11 @@ public class MainActivity extends AppCompatActivity {
                         //for(int i = 0;i <users.length();i++){
                             //JSONObject c = users.getJSONObject(i);
 
-                            String nom = c.getString("Nom");
+                            nom = c.getString("Nom");
                             //String cognom = c.getString("cognom");
                             String edat = c.getString("Edat");
+
+                        validate = true;
                         //}
                     }catch (JSONException e){
                         Log.e(TAG,"JSON parsing error: " + e.getMessage());
@@ -114,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(TAG,"Couldn't get JSON from server");
                 }
                 return null;
+
                 //URL url = new URL("http://192.168.1.11:155");
                 //HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
 
