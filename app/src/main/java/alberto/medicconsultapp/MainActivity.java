@@ -29,10 +29,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 
 public class MainActivity extends AppCompatActivity {
-
     private String TAG = MainActivity.class.getSimpleName();
     protected Boolean validate = false;
     protected String nom = "";
@@ -58,13 +62,13 @@ public class MainActivity extends AppCompatActivity {
         Intent intentMenu;
         intentMenu = new Intent(this,MenuActivity.class);
 
-        //AESCrypt passEnc = AESCrypt.encrypt("sadsd");
         new  HttpASync().execute("");
 
         if(validate) // Lanza el menú si el loggin es correcto
             intentMenu.putExtra("name",nom);
             startActivity(intentMenu);
     }
+
 
     /**
      * Converts the contents of an InputStream to a String.
@@ -127,40 +131,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(TAG,"Couldn't get JSON from server");
                 }
                 return null;
-
-                //URL url = new URL("http://192.168.1.11:155");
-                //HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
-
-                /*InputStream stream = new BufferedInputStream(urlConnection.getInputStream());
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream));
-                StringBuilder builder = new StringBuilder();
-
-                String inputString;
-                while((inputString = bufferedReader.readLine()) != null){
-                    builder.append(inputString);
-                }
-                JSONObject toplevel = new JSONObject(builder.toString());
-                JSONObject main = toplevel.getJSONObject("main");
-
-                urlConnection.disconnect();*/
-
-
-
-                /*urlConnection.setRequestMethod("GET");
-                urlConnection.setDoInput(true);
-                urlConnection.connect();
-                msg = readStream(urlConnection.getInputStream(),500);
-                urlConnection.disconnect();*/
-
-            /*}
-            catch(MalformedURLException ex){
-
-                System.out.println(ex);
-            }
-            catch(IOException | JSONException ex){
-                System.out.println(ex);*/
-            //}
-            //return msg;
         }
         @Override
         protected void onPostExecute(String result){
