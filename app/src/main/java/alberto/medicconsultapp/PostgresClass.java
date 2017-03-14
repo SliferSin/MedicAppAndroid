@@ -16,7 +16,7 @@ public class PostgresClass implements BaseDatos {
     private static String typeDB = "jdbc:postgresql";
     private static String urlDB = "://192.168.1.10:5432/db_TFG";
     private static String userDB = "postgres";
-    private static String passDB = "xeupeukoip";
+    private static String passDB = "password";
 
     public Connection conectar(String url){
         Connection conn = null;
