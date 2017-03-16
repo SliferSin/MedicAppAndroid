@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void Loguear(View view) {
         String formDatos = DNI.getText().toString();
+        nom = DNI.getText().toString();
         Intent intentMenu;
         intentMenu = new Intent(this,MenuActivity.class);
 

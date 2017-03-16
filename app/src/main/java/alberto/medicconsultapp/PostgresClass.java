@@ -18,25 +18,25 @@ public class PostgresClass implements BaseDatos {
     private static String userDB = "postgres";
     private static String passDB = "xeupeukoip";
 
-    public Connection conectar(String url){
+    public Connection conectar(){
         Connection conn = null;
         try{
             Class.forName(driverDB);
             conn = DriverManager.getConnection(typeDB+urlDB,userDB,passDB);
 
         }catch (SQLException se){
-            System.out.println("No se puede conectar. Error: "+se.toString());
+            System.out.println("No se puede conectar. Error: "+ se.toString());
         }
         catch (ClassNotFoundException e){
-            System.out.println("No se encuentra la classe. Error: "+e.getMessage());
+            System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
         }
         return conn;
     }
 
     public boolean consultarLogin(String dni,String pass,Connection conn ){
         String stsql = "SELECT password FROM tbl_usuari WHERE dni = ?";
-        PreparedStatement st = null; //Como PreparedStatement deja poner los valores al a variable ? antes de enviar la consulta
-        ResultSet rs = null;
+        PreparedStatement st; //Como PreparedStatement deja poner los valores al a variable ? antes de enviar la consulta
+        ResultSet rs;
         boolean verificado = false;
         try{
             //Statement st = conn.createStatement();
@@ -44,7 +44,7 @@ public class PostgresClass implements BaseDatos {
             st.setString(1,dni);
             rs = st.executeQuery();
 
-            if(rs != null){
+            if(rs.next()){ //Comprobar condición
                 if(rs.toString() == pass)
                     verificado = true;
             }

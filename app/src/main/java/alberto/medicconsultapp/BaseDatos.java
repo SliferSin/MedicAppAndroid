@@ -7,5 +7,5 @@ import java.sql.Connection;
  */
 
 public interface BaseDatos {
-    public Connection conectar(String url);
+    public Connection conectar();
 }
