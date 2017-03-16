@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getSimpleName();
     protected Boolean validate = false;
     protected String nom = "";
+    protected  String pass = "";
 
     EditText DNI;
     EditText Password;
@@ -60,8 +61,15 @@ public class MainActivity extends AppCompatActivity {
     public void Loguear(View view) {
         String formDatos = DNI.getText().toString();
         nom = DNI.getText().toString();
+        pass = Password.getText().toString();
+
+        //StartThread.start();
+
         Intent intentMenu;
         intentMenu = new Intent(this,MenuActivity.class);
+
+        //UserClass usuario = new UserClass(nom,pass);
+
 
         new  HttpASync().execute("");
 
@@ -69,7 +77,12 @@ public class MainActivity extends AppCompatActivity {
             intentMenu.putExtra("name",nom);
             startActivity(intentMenu);
     }
-
+    Thread StartThread = new Thread(){
+        public void run(){
+            UserClass usuario = new UserClass(nom,pass);
+            validate = usuario.consultarLogin();
+        }
+    };
 
     /**
      * Converts the contents of an InputStream to a String.
@@ -102,36 +115,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String ... params){
-            //try {
-
-                JSONParser js = new JSONParser();
-                String jsonStr = js.getJSONFromUrl("http://192.168.1.11:155");
-
-                if (jsonStr != null){
-                    try{
-                        //JSONObject jsonObj = new JSONObject(jsonStr);
-                        JSONObject c = new JSONObject(jsonStr);
-                        //Getting JSON Array node
-                        //JSONArray users = jsonObj.getJSONArray("users");
-
-                        //looping through All Users
-                        //for(int i = 0;i <users.length();i++){
-                            //JSONObject c = users.getJSONObject(i);
-
-                            nom = c.getString("Nom");
-                            //String cognom = c.getString("cognom");
-                            String edat = c.getString("Edat");
-
-                        validate = true;
-                        //}
-                    }catch (JSONException e){
-                        Log.e(TAG,"JSON parsing error: " + e.getMessage());
-                    }
-                }
-                else{
-                    Log.e(TAG,"Couldn't get JSON from server");
-                }
-                return null;
+            UserClass usuario = new UserClass(nom,pass);
+            validate = usuario.consultarLogin();
+            return null;
         }
         @Override
         protected void onPostExecute(String result){
