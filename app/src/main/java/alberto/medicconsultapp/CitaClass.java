@@ -12,7 +12,6 @@ public class CitaClass {
     private Date data;
 
 
-
     public String getDni_Paciente(){
         return dni_Paciente;
     }

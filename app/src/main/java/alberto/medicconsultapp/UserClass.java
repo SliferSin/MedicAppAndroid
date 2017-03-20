@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * Created by Ashto on 16/03/2017.
@@ -25,12 +24,6 @@ public class UserClass {
     public String getDni(){return this.dni;}
     public String getPassword(){return this.password;}
 
-    //Constructor
-    public UserClass(String dni, String password){
-        this.dni = dni;
-        this.password = password;
-    }
-
     public void setDni(String dni){
         this.dni = dni;
     }
@@ -38,25 +31,27 @@ public class UserClass {
         this.password = password;
     }
 
+    //Constructor
+    public UserClass(String dni, String password){
+        this.dni = dni;
+        this.password = password;
+    }
+
     public boolean consultarLogin(){
         String stsql = "SELECT password FROM tbl_usuari WHERE dni = ?";
         PreparedStatement st; //Como PreparedStatement deja poner los valores al a variable ? antes de enviar la consulta
         ResultSet rs;
-        Statement s = null;
         boolean verificado = false;
 
         try{
             Class.forName(driverDB);
             Connection conn = DriverManager.getConnection(typeDB+urlDB,userDB,passDB);
-            //Statement st = conn.createStatement();
             st = conn.prepareStatement(stsql);
             st.setString(1,this.getDni());
-            s = conn.createStatement();
-            rs = s.executeQuery("SELECT password from tbl_usuari where dni = '1234'");
-            //rs = st.executeQuery();
 
+            rs = st.executeQuery();
 
-            if(rs.next()){ //No contiene el valor de la tabla que deberia
+            if(rs.next()){
                 if(rs.getString("password").equals(this.getPassword()))
                     verificado = true;
             }
@@ -68,5 +63,26 @@ public class UserClass {
         }
         return verificado;
     }
+    public String getUserName(String dni){
+        String stsql = "SELECT nom FROM tbl_usuari WHERE dni = ?";
+        String name = "";
+        PreparedStatement st;
+        ResultSet rs;
 
+        try{
+            Class.forName(driverDB);
+            Connection conn = DriverManager.getConnection(typeDB+urlDB,userDB,passDB);
+            st = conn.prepareStatement(stsql);
+            st.setString(1,this.getDni());
+
+            rs = st.executeQuery();
+            name = rs.getString("nom");
+
+        }catch(SQLException se){
+            System.out.println("No se puede conectar. Error: "+se.toString());
+        }catch (ClassNotFoundException e){
+            System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
+        }
+        return name;
+    }
 }
