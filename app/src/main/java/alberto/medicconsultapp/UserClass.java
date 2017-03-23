@@ -13,8 +13,7 @@ import java.sql.SQLException;
 public class UserClass {
 
     private static String driverDB= "org.postgresql.Driver";
-    private static String typeDB = "jdbc:postgresql";
-    private static String urlDB = "://192.168.1.10:5432/db_TFG";
+    private static String urlDB = "jdbc:postgresql://192.168.1.10:5432/db_TFG";
     private static String userDB = "postgres";
     private static String passDB = "password";
 
@@ -45,7 +44,7 @@ public class UserClass {
 
         try{
             Class.forName(driverDB);
-            Connection conn = DriverManager.getConnection(typeDB+urlDB,userDB,passDB);
+            Connection conn = DriverManager.getConnection(urlDB,userDB,passDB);
             st = conn.prepareStatement(stsql);
             st.setString(1,this.getDni());
 
@@ -55,9 +54,11 @@ public class UserClass {
                 if(rs.getString("password").equals(this.getPassword()))
                     verificado = true;
             }
+            st.close();
+            conn.close();
 
         }catch(SQLException se){
-            System.out.println("No se puede conectar. Error: "+se.toString());
+            System.out.println("No se puede conectar. Error: "+ se.toString());
         }catch (ClassNotFoundException e){
             System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
         }
@@ -71,15 +72,17 @@ public class UserClass {
 
         try{
             Class.forName(driverDB);
-            Connection conn = DriverManager.getConnection(typeDB+urlDB,userDB,passDB);
+            Connection conn = DriverManager.getConnection(urlDB,userDB,passDB);
             st = conn.prepareStatement(stsql);
             st.setString(1,this.getDni());
 
             rs = st.executeQuery();
             name = rs.getString("nom");
 
+            st.close();
+            conn.close();
         }catch(SQLException se){
-            System.out.println("No se puede conectar. Error: "+se.toString());
+            System.out.println("No se puede conectar. Error: "+ se.toString());
         }catch (ClassNotFoundException e){
             System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
         }
