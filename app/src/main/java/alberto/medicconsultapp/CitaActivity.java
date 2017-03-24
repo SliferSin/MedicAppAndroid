@@ -2,6 +2,7 @@ package alberto.medicconsultapp;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +14,7 @@ import java.util.Calendar;
 public class CitaActivity extends AppCompatActivity {
 
     CitaClass cita;
-
+    String dni;
 
     private EditText dateView;
     private int year, month, day;
@@ -29,6 +30,12 @@ public class CitaActivity extends AppCompatActivity {
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        Intent intent = getIntent();//Preparamos el objeto para obtener los datos compartidos
+        Bundle extras = intent.getExtras();//Recibimos los datos del activity anterior
+        if(extras != null){
+            dni = (String)extras.get("DNI");
+        }
 
 
 
@@ -68,7 +75,11 @@ public class CitaActivity extends AppCompatActivity {
             };
 
     private void showDate(int year, int month, int day) {
-        dateView.setText(new StringBuilder().append(day).append("/")
-                .append(month).append("/").append(year));
+        /*dateView.setText(new StringBuilder().append(day).append("/")
+                .append(month).append("/").append(year));*/
+        String data = Integer.toString(year).concat("/").concat(Integer.toString(month)).concat("/").concat(Integer.toString(day));
+        cita = new CitaClass(dni,data);
+        cita.searchMedico(cita.getDni_Paciente()); //Obtenemos el dni del médico asignado
+
     }
 }

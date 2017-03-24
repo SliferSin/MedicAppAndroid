@@ -36,9 +36,9 @@ public class CitaClass {
         this.dni_Medico = dni;
     }
 
-    public void CitaClass(String dniPaciente, String data){
+    public CitaClass(String dniPaciente, String data){
         this.dni_Paciente = dniPaciente;
-        this.dni_Medico = "";
+        //this.dni_Medico = "";
         this.data = data;
     }
 
@@ -74,10 +74,39 @@ public class CitaClass {
             st = conn.prepareStatement(stsql);
             st.setString(1,dni_paciente);
             rs = st.executeQuery();
-            if(rs.next())
+            if(rs.next()){ //Comprobar
+                this.setDni_Medico(rs.getString("dni_metge"));
                 return rs.getString("dni_metge");
+            }
             st.close();
             conn.close();
+        }catch(SQLException se){
+            System.out.println("No se puede conectar. Error: "+ se.toString());
+        }catch (ClassNotFoundException e){
+            System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
+        }
+        return null;
+    }
+    public String[] getHours(String data){
+        String[] listaHora = null;
+        String stsql = "SELECT TO_CHAR(data,'HH:MI')as hora FROM tbl_cita  WHERE TO_CHAR(data,'YYYY-MM-DD') = ? ";
+        PreparedStatement st;
+        ResultSet rs;
+        int i= 0;
+
+        try{
+            Class.forName(driverDB);
+            Connection conn = DriverManager.getConnection(urlDB,userDB,passDB);
+            st = conn.prepareStatement(stsql);
+            st.setString(1,data);
+            rs = st.executeQuery();
+            while(rs.next()) {//Comprobar iteraciones
+                listaHora[i] = rs.getString("hora");
+                i++;
+            }
+            st.close();
+            conn.close();
+            return listaHora;
         }catch(SQLException se){
             System.out.println("No se puede conectar. Error: "+ se.toString());
         }catch (ClassNotFoundException e){
