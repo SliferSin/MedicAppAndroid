@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.os.AsyncTask; //Tareas async
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -15,6 +18,11 @@ public class CitaActivity extends AppCompatActivity {
 
     CitaClass cita;
     String dni;
+    String[] listhoras;
+    ProgressBar Pbar;
+    Boolean completo = false;
+    int mostrar = 0;
+    Toast toast2;
 
     private EditText dateView;
     private int year, month, day;
@@ -30,6 +38,10 @@ public class CitaActivity extends AppCompatActivity {
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        Pbar.setMax(100);
+        Pbar.setProgress(0);
+
 
         Intent intent = getIntent();//Preparamos el objeto para obtener los datos compartidos
         Bundle extras = intent.getExtras();//Recibimos los datos del activity anterior
@@ -75,11 +87,45 @@ public class CitaActivity extends AppCompatActivity {
             };
 
     private void showDate(int year, int month, int day) {
-        /*dateView.setText(new StringBuilder().append(day).append("/")
-                .append(month).append("/").append(year));*/
         String data = Integer.toString(year).concat("/").concat(Integer.toString(month)).concat("/").concat(Integer.toString(day));
         cita = new CitaClass(dni,data);
-        cita.searchMedico(cita.getDni_Paciente()); //Obtenemos el dni del médico asignado
 
+        Intent intentCita;//Preparamos el objeto para obtener los datos compartidos
+        intentCita = new Intent(this,ListHours.class);
+
+        new  DbASync().execute("");
+
+        if (mostrar == 1)
+            Pbar.setVisibility(View.VISIBLE);
+        if(completo){
+            intentCita.putExtra("Horas",listhoras);
+            intentCita.putExtra("Tamaño",listhoras.length);
+            startActivity(intentCita);
+        }
+
+
+        //cita.searchMedico(cita.getDni_Paciente()); //Obtenemos el dni del médico asignado
+    }
+    private class DbASync extends AsyncTask<String,Void,String> {
+        @Override
+        protected String doInBackground(String ... params){
+            cita.searchMedico(cita.getDni_Paciente()); //Obtenemos el dni del médico asignado
+            listhoras = cita.getHours(cita.getdata());
+            if(listhoras != null){
+                completo = true;
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String result){
+            Pbar.setProgress(100);
+            if(completo == false){
+                toast2 = Toast.makeText(getApplicationContext(),"Login erroneo",Toast.LENGTH_LONG);
+                toast2.show();
+            }
+        }
+        @Override
+        protected void onPreExecute(){
+        }
     }
 }

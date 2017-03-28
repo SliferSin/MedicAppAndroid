@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MenuActivity" />
-        <activity android:name=".CitaActivity"></activity>
+        <activity android:name=".CitaActivity" />
+        <activity android:name=".ListHours"></activity>
     </application>
 
 </manifest>
