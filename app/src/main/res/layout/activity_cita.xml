@@ -8,17 +8,6 @@
     tools:context="alberto.medicconsultapp.CitaActivity">
 
     <EditText
-        android:id="@+id/Hora"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ems="10"
-        android:hint="HH:MM"
-        android:inputType="time"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <EditText
         android:id="@+id/data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,6 +18,19 @@
         android:inputType="date"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/Hora" />
+
+    <EditText
+        android:id="@+id/Hora"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="HH:MM"
+        android:inputType="time"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+
 
     <TextView
         android:id="@+id/textView2"

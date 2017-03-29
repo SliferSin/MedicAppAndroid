@@ -1,17 +1,24 @@
 package alberto.medicconsultapp;
 
 import android.app.DatePickerDialog;
+import android.app.DialogFragment;
+import android.widget.DatePicker;
+
+import android.widget.TimePicker;
+import android.app.TimePickerDialog;
+import android.text.format.DateFormat;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.os.AsyncTask; //Tareas async
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+//import java.text.DateFormat;
 import java.util.Calendar;
 
 public class CitaActivity extends AppCompatActivity {
@@ -24,8 +31,8 @@ public class CitaActivity extends AppCompatActivity {
     int mostrar = 0;
     Toast toast2;
 
-    private EditText dateView;
-    private int year, month, day;
+    private EditText dateView,hourView;
+    private int year, month, day,hour,minute;
     private Calendar calendar;
 
     @Override
@@ -33,29 +40,37 @@ public class CitaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cita);
         dateView = (EditText)findViewById(R.id.data);
+        hourView = (EditText)findViewById(R.id.Hora);
 
+        //Inicializamos los "pickers" con la fecha y hora actual
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
+        hour = calendar.get(Calendar.HOUR_OF_DAY);
+        minute = calendar.get(Calendar.MINUTE);
 
         Pbar.setMax(100);
         Pbar.setProgress(0);
-
 
         Intent intent = getIntent();//Preparamos el objeto para obtener los datos compartidos
         Bundle extras = intent.getExtras();//Recibimos los datos del activity anterior
         if(extras != null){
             dni = (String)extras.get("DNI");
         }
-
-
-
         dateView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
                     setDate(v);
+                }
+            }
+        });
+        hourView.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+            @Override
+            public void onFocusChange(View v,boolean hasFocus){
+                if(hasFocus){
+                    //setTime(v);
                 }
             }
         });
@@ -88,6 +103,11 @@ public class CitaActivity extends AppCompatActivity {
 
     private void showDate(int year, int month, int day) {
         String data = Integer.toString(year).concat("/").concat(Integer.toString(month)).concat("/").concat(Integer.toString(day));
+        //Mostrar la fecha seleccionada en el campo fecha
+        /*dateView.setText(new StringBuilder().append(day).append("/")
+                .append(month).append("/").append(year));*/
+        dateView.setText(data);
+
         cita = new CitaClass(dni,data);
 
         Intent intentCita;//Preparamos el objeto para obtener los datos compartidos
@@ -102,8 +122,6 @@ public class CitaActivity extends AppCompatActivity {
             intentCita.putExtra("Tamaño",listhoras.length);
             startActivity(intentCita);
         }
-
-
         //cita.searchMedico(cita.getDni_Paciente()); //Obtenemos el dni del médico asignado
     }
     private class DbASync extends AsyncTask<String,Void,String> {

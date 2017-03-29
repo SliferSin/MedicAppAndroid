@@ -1,17 +1,10 @@
 package alberto.medicconsultapp;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.View;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
-
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -41,6 +34,4 @@ public class MenuActivity extends AppCompatActivity {
         intent.putExtra("dni",dni);
         startActivity(intent);
     }
-
-
 }
