@@ -30,6 +30,7 @@ public class CitaActivity extends AppCompatActivity {
     Boolean completo = false;
     int mostrar = 0;
     Toast toast2;
+    boolean elegido = false;
 
     private EditText dateView,hourView;
     private int year, month, day,hour,minute;
@@ -50,8 +51,8 @@ public class CitaActivity extends AppCompatActivity {
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
 
-        Pbar.setMax(100);
-        Pbar.setProgress(0);
+        /*Pbar.setMax(100);
+        Pbar.setProgress(0);*/
 
         Intent intent = getIntent();//Preparamos el objeto para obtener los datos compartidos
         Bundle extras = intent.getExtras();//Recibimos los datos del activity anterior
@@ -66,14 +67,20 @@ public class CitaActivity extends AppCompatActivity {
                 }
             }
         });
+        //while(!elegido){}
+        //new  DbASync().execute("");
         hourView.setOnFocusChangeListener(new View.OnFocusChangeListener(){
             @Override
             public void onFocusChange(View v,boolean hasFocus){
                 if(hasFocus){
-                    //setTime(v);
+                    setTime(v);
                 }
             }
         });
+    }
+    @SuppressWarnings("deprecation")
+    public void setTime(View view){ //No muestra el time picker
+        showDialog(998);
     }
     @SuppressWarnings("deprecation")
     public void setDate(View view){
@@ -106,22 +113,25 @@ public class CitaActivity extends AppCompatActivity {
         //Mostrar la fecha seleccionada en el campo fecha
         /*dateView.setText(new StringBuilder().append(day).append("/")
                 .append(month).append("/").append(year));*/
+        elegido = true;
         dateView.setText(data);
 
-        cita = new CitaClass(dni,data);
+        //cita = new CitaClass(dni,data);
 
-        Intent intentCita;//Preparamos el objeto para obtener los datos compartidos
-        intentCita = new Intent(this,ListHours.class);
+        //Intent intentCita;//Preparamos el objeto para obtener los datos compartidos
+        //intentCita = new Intent(this,ListHours.class);
 
-        new  DbASync().execute("");
+        //new  DbASync().execute("");
 
-        if (mostrar == 1)
+
+       /* if (mostrar == 1)
             Pbar.setVisibility(View.VISIBLE);
         if(completo){
-            intentCita.putExtra("Horas",listhoras);
+            System.out.println("Completo");
+            /*intentCita.putExtra("Horas",listhoras);
             intentCita.putExtra("Tamaño",listhoras.length);
-            startActivity(intentCita);
-        }
+            startActivity(intentCita);*/
+        //}
         //cita.searchMedico(cita.getDni_Paciente()); //Obtenemos el dni del médico asignado
     }
     private class DbASync extends AsyncTask<String,Void,String> {

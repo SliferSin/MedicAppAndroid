@@ -12,6 +12,7 @@
         android:layout_marginLeft="100dp"
         android:layout_marginTop="50dp"
         android:text="TextView" />
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -26,7 +27,7 @@
             android:id="@+id/Cita"
             android:contentDescription="@string/icon_cita"
             android:layout_marginStart="86dp"
-            android:onClick="PedirCita"/>
+            android:onClick="PedirCita" />
 
         <TextView
             android:text="@string/icon_cita"
@@ -42,6 +43,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,7 +52,8 @@
             android:contentDescription="@string/icon_historial"
             android:layout_marginTop="20dp"
             android:layout_marginStart="86dp"
-            android:onClick="Historial"/>
+            android:onClick="Historial" />
+
         <TextView
             android:text="@string/icon_historial"
             android:layout_width="0dp"

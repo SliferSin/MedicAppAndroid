@@ -30,6 +30,7 @@ public class MenuActivity extends AppCompatActivity {
 
     public void PedirCita(View view){
         Intent intent;
+        System.out.println("PULSADO");
         intent = new Intent(this,CitaActivity.class);
         intent.putExtra("dni",dni);
         startActivity(intent);

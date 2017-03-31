@@ -15,7 +15,7 @@ public class UserClass {
     private static String driverDB= "org.postgresql.Driver";
     private static String urlDB = "jdbc:postgresql://192.168.1.10:5432/db_TFG";
     private static String userDB = "postgres";
-    private static String passDB = "password";
+    private static String passDB = "xeupeukoip";
 
     private static String dni;
     private static String password;

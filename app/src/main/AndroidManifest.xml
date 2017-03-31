@@ -20,7 +20,6 @@
         </activity>
         <activity android:name=".MenuActivity" />
         <activity android:name=".CitaActivity" />
-        <activity android:name=".ListHours"></activity>
     </application>
 
 </manifest>
