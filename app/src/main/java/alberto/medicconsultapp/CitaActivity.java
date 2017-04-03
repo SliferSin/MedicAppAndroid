@@ -2,6 +2,7 @@ package alberto.medicconsultapp;
 
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
+import android.app.Dialog; //Añadido junto al fragmento de código del DialogFragment
 import android.widget.DatePicker;
 
 import android.widget.TimePicker;
@@ -73,7 +74,10 @@ public class CitaActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v,boolean hasFocus){
                 if(hasFocus){
-                    setTime(v);
+                    //setTime(v);
+                    //Código prueba para crear el fragment del TimePicker
+                    DialogFragment newFragment = new TimePickerFragment();
+                    newFragment.show(getFragmentManager(),"TimePicker");
                 }
             }
         });
