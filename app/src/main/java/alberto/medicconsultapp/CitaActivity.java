@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 //import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class CitaActivity extends AppCompatActivity {
@@ -74,10 +75,7 @@ public class CitaActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v,boolean hasFocus){
                 if(hasFocus){
-                    //setTime(v);
-                    //Código prueba para crear el fragment del TimePicker
-                    DialogFragment newFragment = new TimePickerFragment();
-                    newFragment.show(getFragmentManager(),"TimePicker");
+                    setTime(v);
                 }
             }
         });
@@ -97,8 +95,20 @@ public class CitaActivity extends AppCompatActivity {
             return new DatePickerDialog(this,
                     myDateListener, year, month, day);
         }
+        if(id == 998){
+            return new TimePickerDialog(this,myTimeListener,hour,minute,true);
+        }
         return null;
     }
+    private TimePickerDialog.OnTimeSetListener myTimeListener = new TimePickerDialog.OnTimeSetListener(){
+        @Override
+        public void onTimeSet(TimePicker arg0,int arg1,int arg2){
+            // TODO Auto-generated method stub
+            // arg1 = hour
+            // arg2 = minute
+            showTime(arg1,arg2);
+        }
+    };
     private DatePickerDialog.OnDateSetListener myDateListener = new
             DatePickerDialog.OnDateSetListener() {
                 @Override
@@ -111,9 +121,13 @@ public class CitaActivity extends AppCompatActivity {
                     showDate(arg1, arg2+1, arg3);
                 }
             };
+    private void showTime(int hour,int minute){
+        String hora = String.format("%02d:%02d",hour,minute);
+        hourView.setText(hora);
+    }
 
     private void showDate(int year, int month, int day) {
-        String data = Integer.toString(year).concat("/").concat(Integer.toString(month)).concat("/").concat(Integer.toString(day));
+        String data = Integer.toString(day).concat("/").concat(Integer.toString(month)).concat("/").concat(Integer.toString(year));
         //Mostrar la fecha seleccionada en el campo fecha
         /*dateView.setText(new StringBuilder().append(day).append("/")
                 .append(month).append("/").append(year));*/
