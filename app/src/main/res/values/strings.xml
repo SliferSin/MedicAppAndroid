@@ -3,4 +3,5 @@
     <string name="icon_cita">Pedir cita</string>
     <string name="icon_historial">Consultar historial</string>
     <string name="cita_texto">Seleccionar fecha</string>
+    <string name="Send">Enviar</string>
 </resources>

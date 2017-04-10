@@ -17,7 +17,7 @@ public class CitaClass {
     private String data;
 
     private static String driverDB= "org.postgresql.Driver";
-    private static String urlDB = "jdbc:postgresql://192.168.1.10:5432/db_TFG";
+    private static String urlDB = "jdbc:postgresql://192.168.1.12:5432/db_TFG";
     private static String userDB = "postgres";
     private static String passDB = "password";
 
@@ -76,37 +76,9 @@ public class CitaClass {
             rs = st.executeQuery();
             if(rs.next()){ //Comprobar
                 this.setDni_Medico(rs.getString("dni_metge"));
-                return rs.getString("dni_metge");
             }
             st.close();
             conn.close();
-        }catch(SQLException se){
-            System.out.println("No se puede conectar. Error: "+ se.toString());
-        }catch (ClassNotFoundException e){
-            System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
-        }
-        return null;
-    }
-    public String[] getHours(String data){
-        String[] listaHora = null;
-        String stsql = "SELECT TO_CHAR(data,'HH:MI')as hora FROM tbl_cita  WHERE TO_CHAR(data,'YYYY-MM-DD') = ? ";
-        PreparedStatement st;
-        ResultSet rs;
-        int i= 0;
-
-        try{
-            Class.forName(driverDB);
-            Connection conn = DriverManager.getConnection(urlDB,userDB,passDB);
-            st = conn.prepareStatement(stsql);
-            st.setString(1,data);
-            rs = st.executeQuery();
-            while(rs.next()) {//Comprobar iteraciones
-                listaHora[i] = rs.getString("hora");
-                i++;
-            }
-            st.close();
-            conn.close();
-            return listaHora;
         }catch(SQLException se){
             System.out.println("No se puede conectar. Error: "+ se.toString());
         }catch (ClassNotFoundException e){

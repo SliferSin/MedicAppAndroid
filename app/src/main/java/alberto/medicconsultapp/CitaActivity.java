@@ -37,6 +37,7 @@ public class CitaActivity extends AppCompatActivity {
     private EditText dateView,hourView;
     private int year, month, day,hour,minute;
     private Calendar calendar;
+    protected String data; //Fecha(Dia + Hora) seleccionada por el usuario
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +54,10 @@ public class CitaActivity extends AppCompatActivity {
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
 
-        /*Pbar.setMax(100);
-        Pbar.setProgress(0);*/
-
         Intent intent = getIntent();//Preparamos el objeto para obtener los datos compartidos
         Bundle extras = intent.getExtras();//Recibimos los datos del activity anterior
         if(extras != null){
-            dni = (String)extras.get("DNI");
+            dni = (String)extras.get("dni");
         }
         dateView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -69,8 +67,7 @@ public class CitaActivity extends AppCompatActivity {
                 }
             }
         });
-        //while(!elegido){}
-        //new  DbASync().execute("");
+
         hourView.setOnFocusChangeListener(new View.OnFocusChangeListener(){
             @Override
             public void onFocusChange(View v,boolean hasFocus){
@@ -123,48 +120,35 @@ public class CitaActivity extends AppCompatActivity {
             };
     private void showTime(int hour,int minute){
         String hora = String.format("%02d:%02d",hour,minute);
+        data.concat(" ").concat(hora);
         hourView.setText(hora);
     }
 
     private void showDate(int year, int month, int day) {
-        String data = Integer.toString(day).concat("/").concat(Integer.toString(month)).concat("/").concat(Integer.toString(year));
+        String dia = Integer.toString(day).concat("/").concat(Integer.toString(month)).concat("/").concat(Integer.toString(year));
         //Mostrar la fecha seleccionada en el campo fecha
-        /*dateView.setText(new StringBuilder().append(day).append("/")
-                .append(month).append("/").append(year));*/
         elegido = true;
-        dateView.setText(data);
-
-        //cita = new CitaClass(dni,data);
-
-        //Intent intentCita;//Preparamos el objeto para obtener los datos compartidos
-        //intentCita = new Intent(this,ListHours.class);
-
-        //new  DbASync().execute("");
-
-
-       /* if (mostrar == 1)
-            Pbar.setVisibility(View.VISIBLE);
-        if(completo){
-            System.out.println("Completo");
-            /*intentCita.putExtra("Horas",listhoras);
-            intentCita.putExtra("Tamaño",listhoras.length);
-            startActivity(intentCita);*/
-        //}
-        //cita.searchMedico(cita.getDni_Paciente()); //Obtenemos el dni del médico asignado
+        data = dia;
+        dateView.setText(dia);
     }
+
+    public void Enviar(View view){
+        cita = new CitaClass(dni,data);
+        new  DbASync().execute(""); //Ejecutamos la consulta en 2o plano
+    }
+
     private class DbASync extends AsyncTask<String,Void,String> {
         @Override
         protected String doInBackground(String ... params){
             cita.searchMedico(cita.getDni_Paciente()); //Obtenemos el dni del médico asignado
-            listhoras = cita.getHours(cita.getdata());
-            if(listhoras != null){
-                completo = true;
-            }
+            /********************************************/
+            /* Logica para seleccionar la cita correcta */
+            /********************************************/
             return null;
         }
         @Override
         protected void onPostExecute(String result){
-            Pbar.setProgress(100);
+            //Pbar.setProgress(100);
             if(completo == false){
                 toast2 = Toast.makeText(getApplicationContext(),"Login erroneo",Toast.LENGTH_LONG);
                 toast2.show();
