@@ -141,6 +141,12 @@ public class CitaActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String ... params){
             cita.searchMedico(cita.getDni_Paciente()); //Obtenemos el dni del médico asignado
+            if(cita.searchCita(data)){
+                //Si la fecha esta disponible
+            }
+            else{
+                //Si no esta disponible
+            }
             /********************************************/
             /* Logica para seleccionar la cita correcta */
             /********************************************/
