@@ -87,37 +87,26 @@ public class CitaClass {
         }
     }
 
-    public Boolean searchCita(String data){
+    public Boolean searchNearestCita(String data){
         String stsql = "select * from tbl_cita cit  " +
-                       "join tbl_medicopaciente medpac on cit.dni_metge = medpac.dni_metge " +
-                       "where medpac.dni_pacient = ?";// and cit.data = ?";
-        String stsql2;
+                        "join tbl_medicopaciente medpac on cit.dni_metge = medpac.dni_metge " +
+                        "where medpac.dni_pacient = ? and cit.data > ? limit 1";
         PreparedStatement st;
         ResultSet rs;
 
         try{
             Class.forName(driverDB);
             Connection conn = DriverManager.getConnection(urlDB,userDB,passDB);
-            stsql2 = stsql;
-            st = conn.prepareStatement(stsql2 + "and cit.data = ?");
+            st = conn.prepareStatement(stsql);
             st.setString(1,this.getDni_Paciente());
             st.setString(2,this.getdata());
             rs = st.executeQuery();
             if(rs.next()){
                 //La fecha seleccionada esta disponible
+                return true;
             }
             else{
-                conn.close();
-                st.close();
-                st = conn.prepareStatement(stsql + "and cit.data > ? limit 1");
-                st.setString(1,this.getDni_Paciente());
-                st.setString(2,this.getdata());
-                rs = st.executeQuery();
-                if(rs.next()){
-                    //devuelve la fecha más cercana a la seleccionada
-                }
-                //Resultado nulo
-
+                return false;
             }
 
         }catch (SQLException se){
@@ -125,5 +114,35 @@ public class CitaClass {
         }catch (ClassNotFoundException e){
             System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
         }
+        return null;
+    }
+    public Boolean searchCita(String data){ //Comprobar los return
+        String stsql = "select * from tbl_cita cit  " +
+                       "join tbl_medicopaciente medpac on cit.dni_metge = medpac.dni_metge " +
+                       "where medpac.dni_pacient = ? and cit.data = ?";
+        PreparedStatement st;
+        ResultSet rs;
+
+        try{
+            Class.forName(driverDB);
+            Connection conn = DriverManager.getConnection(urlDB,userDB,passDB);
+            st = conn.prepareStatement(stsql);
+            st.setString(1,this.getDni_Paciente());
+            st.setString(2,this.getdata());
+            rs = st.executeQuery();
+            if(rs.next()){
+                //La fecha seleccionada esta disponible
+                return true;
+            }
+            else{
+                return false;
+            }
+
+        }catch (SQLException se){
+            System.out.println("No se puede conectar. Error: "+ se.toString());
+        }catch (ClassNotFoundException e){
+            System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
+        }
+        return null;
     }
 }

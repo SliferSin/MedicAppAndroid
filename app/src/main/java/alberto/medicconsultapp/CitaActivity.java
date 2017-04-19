@@ -143,13 +143,14 @@ public class CitaActivity extends AppCompatActivity {
             cita.searchMedico(cita.getDni_Paciente()); //Obtenemos el dni del médico asignado
             if(cita.searchCita(data)){
                 //Si la fecha esta disponible
+                cita.setCita(cita);
             }
-            else{
-                //Si no esta disponible
+            else{ //Fecha no disponible buscará la más cercana
+                if(cita.searchNearestCita(data)){
+                    //Mostrar ventana aviso con el cambio de fecha
+                    cita.setCita(cita);
+                }
             }
-            /********************************************/
-            /* Logica para seleccionar la cita correcta */
-            /********************************************/
             return null;
         }
         @Override
