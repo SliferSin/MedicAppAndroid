@@ -1,15 +1,13 @@
 package alberto.medicconsultapp;
 
-import android.app.DatePickerDialog;
-import android.app.DialogFragment;
-import android.app.Dialog; //Añadido junto al fragmento de código del DialogFragment
-import android.widget.DatePicker;
 
+import android.app.Dialog; //Añadido junto al fragmento de código del DialogFragment
 import android.widget.TimePicker;
+import android.widget.DatePicker;
 import android.app.TimePickerDialog;
+import android.app.DatePickerDialog;
 import android.text.format.DateFormat;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,7 +17,6 @@ import android.os.AsyncTask; //Tareas async
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-//import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -120,12 +117,13 @@ public class CitaActivity extends AppCompatActivity {
             };
     private void showTime(int hour,int minute){
         String hora = String.format("%02d:%02d",hour,minute);
-        data.concat(" ").concat(hora);
+        data = data.concat(" ").concat(hora);
         hourView.setText(hora);
     }
 
     private void showDate(int year, int month, int day) {
-        String dia = Integer.toString(day).concat("/").concat(Integer.toString(month)).concat("/").concat(Integer.toString(year));
+        //String dia = Integer.toString(day).concat("/").concat(Integer.toString(month)).concat("/").concat(Integer.toString(year));
+        String dia = Integer.toString(year).concat("/").concat(Integer.toString(month)).concat("/").concat(Integer.toString(day));
         //Mostrar la fecha seleccionada en el campo fecha
         elegido = true;
         data = dia;

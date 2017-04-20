@@ -5,7 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Ashto on 14/03/2017.
@@ -17,7 +21,7 @@ public class CitaClass {
     private String data;
 
     private static String driverDB= "org.postgresql.Driver";
-    private static String urlDB = "jdbc:postgresql://192.168.1.11:5432/db_TFG";
+    private static String urlDB = "jdbc:postgresql://192.168.1.12:5432/db_TFG";
     private static String userDB = "postgres";
     private static String passDB = "password";
 
@@ -116,7 +120,7 @@ public class CitaClass {
         }
         return null;
     }
-    public Boolean searchCita(String data){ //Comprobar los return
+    public Boolean searchCita(String data){ //Comprobar los return // Se cierra al ennviar consulta
         String stsql = "select * from tbl_cita cit  " +
                        "join tbl_medicopaciente medpac on cit.dni_metge = medpac.dni_metge " +
                        "where medpac.dni_pacient = ? and cit.data = ?";
@@ -128,7 +132,13 @@ public class CitaClass {
             Connection conn = DriverManager.getConnection(urlDB,userDB,passDB);
             st = conn.prepareStatement(stsql);
             st.setString(1,this.getDni_Paciente());
-            st.setString(2,this.getdata());
+
+            //Date s = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(getdata());
+            java.sql.Date dia = java.sql.Date.valueOf(getdata());
+
+            st.setDate(2,dia);
+            //st.setTimestamp(2, Timestamp.valueOf(this.getdata()));//Problema con la hora HH:mm:ss:SS --> Quitar el SS
+
             rs = st.executeQuery();
             if(rs.next()){
                 //La fecha seleccionada esta disponible
