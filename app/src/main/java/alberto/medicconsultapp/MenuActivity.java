@@ -9,7 +9,8 @@ import android.widget.TextView;
 public class MenuActivity extends AppCompatActivity {
 
     TextView text;
-    protected String dni = "";
+    private String dni = "";
+    private String data = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,16 +22,20 @@ public class MenuActivity extends AppCompatActivity {
 
         text = (TextView)findViewById(R.id.textView);
 
-        if(extras != null){
+        if(extras != null){ //Editar data para que sea del estilo yyyy-MM-dd HH:mm y quitar el text.setText(dni);
             dni = (String)extras.get("DNI");
-            text.setText(dni);
+            data = (String)extras.get("DATA");
+            if(data == ""){
+                text.setText(dni);
+            }
+            else{
+                text.setText(data);
+            }
         }
-
     }
 
     public void PedirCita(View view){
         Intent intent;
-        System.out.println("PULSADO");
         intent = new Intent(this,CitaActivity.class);
         intent.putExtra("dni",dni);
         startActivity(intent);

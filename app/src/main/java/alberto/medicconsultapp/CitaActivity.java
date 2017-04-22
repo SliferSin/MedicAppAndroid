@@ -6,7 +6,6 @@ import android.widget.TimePicker;
 import android.widget.DatePicker;
 import android.app.TimePickerDialog;
 import android.app.DatePickerDialog;
-import android.text.format.DateFormat;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -14,27 +13,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.os.AsyncTask; //Tareas async
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class CitaActivity extends AppCompatActivity {
 
     CitaClass cita;
     String dni;
-    String[] listhoras;
-    ProgressBar Pbar;
     Boolean completo = false;
-    int mostrar = 0;
     Toast toast2;
-    boolean elegido = false;
 
     private EditText dateView,hourView;
     private int year, month, day,hour,minute;
     private Calendar calendar;
-    protected String data; //Fecha(Dia + Hora) seleccionada por el usuario
+    private String data; //Fecha(Dia + Hora) seleccionada por el usuario
+    private boolean validate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,22 +111,30 @@ public class CitaActivity extends AppCompatActivity {
             };
     private void showTime(int hour,int minute){
         String hora = String.format("%02d:%02d",hour,minute);
-        data = data.concat(" ").concat(hora);
+        data = data.concat(" ").concat(hora).concat(":00.000000000");
         hourView.setText(hora);
     }
 
     private void showDate(int year, int month, int day) {
-        //String dia = Integer.toString(day).concat("/").concat(Integer.toString(month)).concat("/").concat(Integer.toString(year));
-        String dia = Integer.toString(year).concat("/").concat(Integer.toString(month)).concat("/").concat(Integer.toString(day));
+        String dia = Integer.toString(year).concat("-0").concat(Integer.toString(month)).concat("-").concat(Integer.toString(day));
         //Mostrar la fecha seleccionada en el campo fecha
-        elegido = true;
         data = dia;
         dateView.setText(dia);
     }
 
     public void Enviar(View view){
+        //Configuración del siguiente Activity que se abrira
+        Intent intentMenu;
+        intentMenu = new Intent(this, MenuActivity.class);
+
         cita = new CitaClass(dni,data);
         new  DbASync().execute(""); //Ejecutamos la consulta en 2o plano
+
+        if (validate) {
+            intentMenu.putExtra("DNI", dni);
+            intentMenu.putExtra("DATA",cita.getdata());
+            startActivity(intentMenu);
+        }
     }
 
     private class DbASync extends AsyncTask<String,Void,String> {
@@ -140,11 +142,13 @@ public class CitaActivity extends AppCompatActivity {
         protected String doInBackground(String ... params){
             cita.searchMedico(cita.getDni_Paciente()); //Obtenemos el dni del médico asignado
             if(cita.searchCita(data)){
+                completo = true;
                 //Si la fecha esta disponible
                 cita.setCita(cita);
             }
-            else{ //Fecha no disponible buscará la más cercana
+            else{ //Fecha no disponible buscará la más cercana //Comrpobar este caso
                 if(cita.searchNearestCita(data)){
+                    completo = true;
                     //Mostrar ventana aviso con el cambio de fecha
                     cita.setCita(cita);
                 }
@@ -153,9 +157,13 @@ public class CitaActivity extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(String result){
-            //Pbar.setProgress(100);
-            if(completo == false){
-                toast2 = Toast.makeText(getApplicationContext(),"Login erroneo",Toast.LENGTH_LONG);
+            if(completo == true){
+                toast2 = Toast.makeText(getApplicationContext(),"Fecha reservada",Toast.LENGTH_LONG);
+                validate = true; //Activamos la señal para pasar al siguiente activity
+                toast2.show();
+            }
+            else{
+                toast2 = Toast.makeText(getApplicationContext(),"Error en la reserva",Toast.LENGTH_LONG);
                 toast2.show();
             }
         }
