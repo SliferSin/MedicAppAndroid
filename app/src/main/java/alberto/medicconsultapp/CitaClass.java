@@ -87,7 +87,7 @@ public class CitaClass {
         }
     }
 
-    public Boolean searchNearestCita(String data){ //Acomodar al estilo del searchCita
+    public String searchNearestCita(String data){ //Acomodar al estilo del searchCita
         String stsql = "select * from tbl_cita cit  " +
                         "join tbl_medicopaciente medpac on cit.dni_metge = medpac.dni_metge " +
                         "where medpac.dni_pacient = ? and cit.data > ? limit 1";
@@ -99,14 +99,15 @@ public class CitaClass {
             Connection conn = DriverManager.getConnection(urlDB,userDB,passDB);
             st = conn.prepareStatement(stsql);
             st.setString(1,this.getDni_Paciente());
-            st.setString(2,this.getdata());
+            st.setTimestamp(2, Timestamp.valueOf(this.getdata()));
             rs = st.executeQuery();
+
             if(rs.next()){
-                //La fecha seleccionada esta disponible
-                return true;
+                //La fecha seleccionada esta disponible y la devolvemos
+                return rs.getString("data");
             }
             else{
-                return false;
+                return null;
             }
 
         }catch (SQLException se){
@@ -129,8 +130,8 @@ public class CitaClass {
             st = conn.prepareStatement(stsql);
             st.setString(1,this.getDni_Paciente());
             st.setTimestamp(2, Timestamp.valueOf(this.getdata()));
-
             rs = st.executeQuery();
+
             if(rs.next()){
                 //La fecha seleccionada esta disponible
                 return true;

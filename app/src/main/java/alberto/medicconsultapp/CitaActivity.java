@@ -146,8 +146,8 @@ public class CitaActivity extends AppCompatActivity {
                 //Si la fecha esta disponible
                 cita.setCita(cita);
             }
-            else{ //Fecha no disponible buscará la más cercana //Comrpobar este caso
-                if(cita.searchNearestCita(data)){
+            else{ //Fecha no disponible buscará la más cercana //Comprobar este caso
+                if(cita.searchNearestCita(data)!=null){
                     completo = true;
                     //Mostrar ventana aviso con el cambio de fecha
                     cita.setCita(cita);
