@@ -35,6 +35,7 @@ public class CitaClass {
     public void setDni_Medico(String dni){
         this.dni_Medico = dni;
     }
+    public void setData(String data){this.data = data;}
 
     public CitaClass(String dniPaciente, String data){
         this.dni_Paciente = dniPaciente;

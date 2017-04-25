@@ -111,15 +111,27 @@ public class CitaActivity extends AppCompatActivity {
             };
     private void showTime(int hour,int minute){
         String hora = String.format("%02d:%02d",hour,minute);
-        data = data.concat(" ").concat(hora).concat(":00.000000000");
+        data = data.concat(" ").concat(hora).concat(":00.0000");
         hourView.setText(hora);
     }
 
     private void showDate(int year, int month, int day) {
-        String dia = Integer.toString(year).concat("-0").concat(Integer.toString(month)).concat("-").concat(Integer.toString(day));
+        String dia = "";
+        String mes = "";
+        String año = Integer.toString(year);
+        String fecha;
+        //String fecha = Integer.toString(year).concat("-0").concat(Integer.toString(month)).concat("-").concat(Integer.toString(day));
+        if(Integer.toString(month).length()<10){
+            mes = "0" + Integer.toString(month);
+        }
+        if(Integer.toString(day).length()<10){
+            dia = "0" + Integer.toString(day);
+        }
+        fecha = año + "-" + mes + "-" + dia;
+
         //Mostrar la fecha seleccionada en el campo fecha
-        data = dia;
-        dateView.setText(dia);
+        data = fecha;
+        dateView.setText(fecha);
     }
 
     public void Enviar(View view){
@@ -147,8 +159,10 @@ public class CitaActivity extends AppCompatActivity {
                 cita.setCita(cita);
             }
             else{ //Fecha no disponible buscará la más cercana //Comprobar este caso
-                if(cita.searchNearestCita(data)!=null){
+                String newData = cita.searchNearestCita(data);
+                if(newData.isEmpty()){
                     completo = true;
+                    cita.setData(newData);
                     //Mostrar ventana aviso con el cambio de fecha
                     cita.setCita(cita);
                 }
