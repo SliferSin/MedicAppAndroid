@@ -2,10 +2,12 @@ package alberto.medicconsultapp;
 
 
 import android.app.Dialog; //Añadido junto al fragmento de código del DialogFragment
+import android.content.DialogInterface;
 import android.widget.TimePicker;
 import android.widget.DatePicker;
 import android.app.TimePickerDialog;
 import android.app.DatePickerDialog;
+import android.app.AlertDialog;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +31,9 @@ public class CitaActivity extends AppCompatActivity {
     private Calendar calendar;
     private String data; //Fecha(Dia + Hora) seleccionada por el usuario
     private boolean validate = false;
+    private String newData = "";
+    AlertDialog.Builder alert;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,7 @@ public class CitaActivity extends AppCompatActivity {
         dateView = (EditText)findViewById(R.id.data);
         hourView = (EditText)findViewById(R.id.Hora);
 
+        alert = new AlertDialog.Builder(getApplicationContext());
         //Inicializamos los "pickers" con la fecha y hora actual
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
@@ -116,16 +122,16 @@ public class CitaActivity extends AppCompatActivity {
     }
 
     private void showDate(int year, int month, int day) {
-        String dia = "";
-        String mes = "";
+        String dia = Integer.toString(day);
+        String mes = Integer.toString(month);
         String año = Integer.toString(year);
         String fecha;
         //String fecha = Integer.toString(year).concat("-0").concat(Integer.toString(month)).concat("-").concat(Integer.toString(day));
-        if(Integer.toString(month).length()<10){
-            mes = "0" + Integer.toString(month);
+        if(month<10){
+            mes = "0" + mes;
         }
-        if(Integer.toString(day).length()<10){
-            dia = "0" + Integer.toString(day);
+        if(day<10){
+            dia = "0" + dia;
         }
         fecha = año + "-" + mes + "-" + dia;
 
@@ -149,7 +155,7 @@ public class CitaActivity extends AppCompatActivity {
         }
     }
 
-    private class DbASync extends AsyncTask<String,Void,String> {
+    private class DbASync extends AsyncTask<String,String,String> {
         @Override
         protected String doInBackground(String ... params){
             cita.searchMedico(cita.getDni_Paciente()); //Obtenemos el dni del médico asignado
@@ -158,16 +164,33 @@ public class CitaActivity extends AppCompatActivity {
                 //Si la fecha esta disponible
                 cita.setCita(cita);
             }
-            else{ //Fecha no disponible buscará la más cercana //Comprobar este caso
-                String newData = cita.searchNearestCita(data);
-                if(newData.isEmpty()){
+            else{ //Fecha no disponible buscará la más cercana
+                newData = cita.searchNearestCita(data);
+                /*if(!newData.isEmpty()){
                     completo = true;
-                    cita.setData(newData);
+
+                    alert.setMessage("Fecha más cercana disponible:" + newData);
+                    alert.setCancelable(true);
+                    alert.setNeutralButton("Cambiar", new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which){
+                            dialog.dismiss();
+                            cita.setData(newData);
+                        }
+                    });
+                    alert.setNegativeButton("Cancel",new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which){
+                            dialog.dismiss();
+                        }
+                    });
                     //Mostrar ventana aviso con el cambio de fecha
-                    cita.setCita(cita);
-                }
+                    //cita.setCita(cita);
+
+                    //alert.show();
+                }*/
             }
-            return null;
+            return newData;
         }
         @Override
         protected void onPostExecute(String result){
@@ -177,7 +200,7 @@ public class CitaActivity extends AppCompatActivity {
                 toast2.show();
             }
             else{
-                toast2 = Toast.makeText(getApplicationContext(),"Error en la reserva",Toast.LENGTH_LONG);
+                toast2 = Toast.makeText(getApplicationContext(),"Fecha más cercana disponible: " + result,Toast.LENGTH_LONG);
                 toast2.show();
             }
         }
