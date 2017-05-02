@@ -41,10 +41,10 @@ public class MenuActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void Historial(View view){
-        /*Intent intent;
+        Intent intent;
         intent = new Intent(this,HistorialActivity.class);
-        intent.putExtra("dni",dni);
-        intent.putExtra("data",data);
-        startActivity(intent);*/
+        intent.putExtra("DNI",dni);
+        intent.putExtra("DATA",data);
+        startActivity(intent);
     }
 }

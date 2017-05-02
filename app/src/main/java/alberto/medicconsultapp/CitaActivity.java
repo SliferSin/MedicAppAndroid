@@ -166,29 +166,6 @@ public class CitaActivity extends AppCompatActivity {
             }
             else{ //Fecha no disponible buscará la más cercana
                 newData = cita.searchNearestCita(data);
-                /*if(!newData.isEmpty()){
-                    completo = true;
-
-                    alert.setMessage("Fecha más cercana disponible:" + newData);
-                    alert.setCancelable(true);
-                    alert.setNeutralButton("Cambiar", new DialogInterface.OnClickListener(){
-                        @Override
-                        public void onClick(DialogInterface dialog, int which){
-                            dialog.dismiss();
-                            cita.setData(newData);
-                        }
-                    });
-                    alert.setNegativeButton("Cancel",new DialogInterface.OnClickListener(){
-                        @Override
-                        public void onClick(DialogInterface dialog, int which){
-                            dialog.dismiss();
-                        }
-                    });
-                    //Mostrar ventana aviso con el cambio de fecha
-                    //cita.setCita(cita);
-
-                    //alert.show();
-                }*/
             }
             return newData;
         }

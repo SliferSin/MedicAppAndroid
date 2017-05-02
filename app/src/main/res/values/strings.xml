@@ -4,4 +4,6 @@
     <string name="icon_historial">Consultar historial</string>
     <string name="cita_texto">Seleccionar fecha</string>
     <string name="Send">Enviar</string>
+    <string name="data_historial">Data:</string>
+    <string name="user_historial">Historial de </string>
 </resources>
