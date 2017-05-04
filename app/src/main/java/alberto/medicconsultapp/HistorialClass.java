@@ -1,12 +1,24 @@
 package alberto.medicconsultapp;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+
 /**
  * Created by Ashto on 02/05/2017.
  */
 
 public class HistorialClass {
     private String data;
-    private String dni_paciente;
+    private String dni_paciente ;
+    private String nom;
+    private String cognoms;
+    private int edat;
+    private String enfermetat;
+    private String observacions;
 
     private static String driverDB= "org.postgresql.Driver";
     private static String urlDB = "jdbc:postgresql://192.168.1.10:5432/db_TFG";
@@ -14,9 +26,14 @@ public class HistorialClass {
     private static String passDB = "password";
 
     /*Constructor*/
-    public void HistorialClass(String dni,String data){
+    public HistorialClass(String dni,String data){
         this.dni_paciente = dni;
         this.data = data;
+        this.nom = "";
+        this.cognoms = "";
+        this.edat = 0;
+        this.enfermetat = "";
+        this.observacions = "";
     }
     public String getDni(){
         return this.dni_paciente;
@@ -24,8 +41,59 @@ public class HistorialClass {
     public String getDataHistorial(){
         return this.data;
     }
+    public String getNom(){return this.nom;}
+    public String getCognoms(){return this.cognoms;}
+    public String getEnfermetat(){return this.enfermetat;}
+    public String getObservacions(){return this.observacions;}
+    public int getEdat(){return this.edat;}
 
-    public String getHistorial(String dni){
-        
+    public void setNom(String nom){
+        this.nom = nom;
+    }
+    public void setCognoms(String cognoms){
+        this.cognoms = cognoms;
+    }
+    public void setEdat(int edat){
+        this.edat = edat;
+    }
+    public void setEnfermetat(String enfermetat){
+        this.enfermetat = enfermetat;
+    }
+    public void setObservacions(String observacions){
+        this.observacions = observacions;
+    }
+
+
+    /*** Hace la conexión y busca los datos para terminar de rellenar el objeto historial ***/
+    public void fillHistorial(HistorialClass historial){
+        String stsql = "SELECT u.nom,u.cognoms,u.edat,h.malaltia,h.observacions" +
+                       "FROM tbl_historial h INNER JOIN tbl_usuari u ON(h.id_pacient = u.dni)" +
+                       "WHERe h.data = ? and h.id_pacient = ?";
+        PreparedStatement st;
+        ResultSet rs;
+
+        try {
+            Class.forName(driverDB);
+            Connection conn = DriverManager.getConnection(urlDB, userDB, passDB);
+            st = conn.prepareStatement(stsql);
+            st.setString(1, historial.getDataHistorial());
+            st.setString(2, historial.getDni());
+            rs = st.executeQuery();
+
+            if(rs.next()){
+                this.setNom(rs.getString("nom"));
+                this.setCognoms(rs.getString("cognoms"));
+                this.setEdat(rs.getInt("edat"));
+                this.setEnfermetat(rs.getString("malaltia"));
+                this.setObservacions(rs.getString("observacions"));
+            }
+
+            st.close();
+            conn.close();
+        }catch(SQLException se){
+            System.out.println("No se puede conectar. Error: "+ se.toString());
+        }catch (ClassNotFoundException e){
+            System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
+        }
     }
 }
