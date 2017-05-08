@@ -32,7 +32,6 @@ public class CitaActivity extends AppCompatActivity {
     private String data; //Fecha(Dia + Hora) seleccionada por el usuario
     private boolean validate = false;
     private String newData = "";
-    AlertDialog.Builder alert;
 
 
     @Override
@@ -42,7 +41,6 @@ public class CitaActivity extends AppCompatActivity {
         dateView = (EditText)findViewById(R.id.data);
         hourView = (EditText)findViewById(R.id.Hora);
 
-        alert = new AlertDialog.Builder(getApplicationContext());
         //Inicializamos los "pickers" con la fecha y hora actual
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);

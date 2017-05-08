@@ -6,7 +6,15 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
-public class MenuActivity extends AppCompatActivity {
+import android.app.ListActivity;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
+
+import java.util.List;
+
+public class MenuActivity extends ListActivity{//AppCompatActivity {
 
     TextView text;
     private String dni = "";
@@ -22,14 +30,15 @@ public class MenuActivity extends AppCompatActivity {
 
         text = (TextView)findViewById(R.id.textView);
 
-        if(extras != null){ //Editar data para que sea del estilo yyyy-MM-dd HH:mm y quitar el text.setText(dni);
+        if(extras != null){ //Comprobar el setText del else
             dni = (String)extras.get("DNI");
             data = (String)extras.get("DATA");
-            if(data == ""){
+            if(data.isEmpty()){
                 text.setText(dni);
             }
             else{
-                text.setText(data);
+                //text.setText(data);
+                text.setText(data.substring(0,16));
             }
         }
     }
@@ -44,7 +53,7 @@ public class MenuActivity extends AppCompatActivity {
         Intent intent;
         intent = new Intent(this,HistorialActivity.class);
         intent.putExtra("DNI",dni);
-        intent.putExtra("DATA",data);
-        startActivity(intent);
+        //intent.putExtra("DATA",data);
+        //startActivity(intent);
     }
 }

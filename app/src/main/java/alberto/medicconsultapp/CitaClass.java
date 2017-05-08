@@ -39,7 +39,7 @@ public class CitaClass {
 
     public CitaClass(String dniPaciente, String data){
         this.dni_Paciente = dniPaciente;
-        //this.dni_Medico = "";
+        this.dni_Medico = "";
         this.data = data;
     }
 

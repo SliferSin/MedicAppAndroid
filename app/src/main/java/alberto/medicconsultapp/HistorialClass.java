@@ -76,7 +76,7 @@ public class HistorialClass {
             Class.forName(driverDB);
             Connection conn = DriverManager.getConnection(urlDB, userDB, passDB);
             st = conn.prepareStatement(stsql);
-            st.setString(1, historial.getDataHistorial());
+            st.setTimestamp(1, Timestamp.valueOf(historial.getDataHistorial()));
             st.setString(2, historial.getDni());
             rs = st.executeQuery();
 
