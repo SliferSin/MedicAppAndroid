@@ -96,4 +96,30 @@ public class HistorialClass {
             System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
         }
     }
+    public boolean searchHistorial(String dni, String data){
+        String stsql = "SELECT data from tbl_historial WHERE id_pacient = ?";
+        PreparedStatement st;
+        ResultSet rs;
+        boolean encontrado = false;
+
+        try{
+            Class.forName(driverDB);
+            Connection conn = DriverManager.getConnection(urlDB, userDB, passDB);
+            st = conn.prepareStatement(stsql);
+            st.setString(1, dni);
+            rs = st.executeQuery();
+
+            if(rs.next()){
+                encontrado = true;
+            }
+
+            st.close();
+            conn.close();
+        }catch(SQLException se){
+            System.out.println("No se puede conectar. Error: "+ se.toString());
+        }catch (ClassNotFoundException e){
+            System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
+        }
+        return encontrado;
+    }
 }

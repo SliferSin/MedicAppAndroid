@@ -2,12 +2,10 @@ package alberto.medicconsultapp;
 
 
 import android.app.Dialog; //Añadido junto al fragmento de código del DialogFragment
-import android.content.DialogInterface;
 import android.widget.TimePicker;
 import android.widget.DatePicker;
 import android.app.TimePickerDialog;
 import android.app.DatePickerDialog;
-import android.app.AlertDialog;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
