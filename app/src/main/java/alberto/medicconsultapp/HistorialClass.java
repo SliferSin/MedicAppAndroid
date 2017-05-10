@@ -1,6 +1,7 @@
 package alberto.medicconsultapp;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -97,7 +98,7 @@ public class HistorialClass {
         }
     }
     public boolean searchHistorial(String dni, String data){
-        String stsql = "SELECT data from tbl_historial WHERE id_pacient = ?";
+        String stsql = "SELECT * from tbl_historial WHERE id_pacient = ?";// and data = ?";
         PreparedStatement st;
         ResultSet rs;
         boolean encontrado = false;
@@ -107,6 +108,7 @@ public class HistorialClass {
             Connection conn = DriverManager.getConnection(urlDB, userDB, passDB);
             st = conn.prepareStatement(stsql);
             st.setString(1, dni);
+            //st.setString(2,data);
             rs = st.executeQuery();
 
             if(rs.next()){

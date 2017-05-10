@@ -14,9 +14,10 @@ public class HistorialActivity extends AppCompatActivity {
     HistorialClass historial;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { //No encuentra el layout Constraint layout
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historial);
+
 
         Intent intent = getIntent();//Preparamos el objeto para obtener los datos compartidos
         Bundle extras = intent.getExtras();//Recibimos los datos del activity anterior

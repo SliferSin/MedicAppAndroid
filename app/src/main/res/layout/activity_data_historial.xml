@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     tools:context="alberto.medicconsultapp.dataHistorial">
 
     <EditText
         android:id="@+id/DataHistorial"
-        android:layout_width="100dp"
-        android:layout_height="37dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="DD/MM/YYY"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="87dp"

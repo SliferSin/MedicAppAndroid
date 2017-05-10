@@ -33,8 +33,8 @@ public class dataHistorial extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_historial);
 
-        button = (Button) findViewById(R.id.Consultar);
-        dataHistorial = (EditText) findViewById(R.id.DataHistorial);
+        button = (Button)findViewById(R.id.Consultar);
+        dataHistorial = (EditText)findViewById(R.id.DataHistorial);
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
@@ -43,7 +43,7 @@ public class dataHistorial extends AppCompatActivity {
         Intent intent = getIntent();//Preparamos el objeto para obtener los datos compartidos
         Bundle extras = intent.getExtras();//Recibimos los datos del activity anterior
         if (extras != null) {
-            dni = (String) extras.get("dni");
+            dni = (String) extras.get("DNI");
         }
         dataHistorial.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override

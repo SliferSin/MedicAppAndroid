@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (mostrar == 1)
             Pbar.setVisibility(View.VISIBLE);
+
         if (validate) {
             intentMenu.putExtra("DNI", dni);
             startActivity(intentMenu);

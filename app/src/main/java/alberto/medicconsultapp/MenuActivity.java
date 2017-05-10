@@ -6,15 +6,8 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
-import android.app.ListActivity;
-import android.widget.ArrayAdapter;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 
-import java.util.List;
-
-public class MenuActivity extends ListActivity{//AppCompatActivity {
+public class MenuActivity extends AppCompatActivity {
 
     TextView text;
     private String dni = "";
@@ -30,10 +23,10 @@ public class MenuActivity extends ListActivity{//AppCompatActivity {
 
         text = (TextView)findViewById(R.id.textView);
 
-        if(extras != null){ //Comprobar el setText del else
+        if(extras != null){
             dni = (String)extras.get("DNI");
             data = (String)extras.get("DATA");
-            if(data.isEmpty()){
+            if(data==null){
                 text.setText(dni);
             }
             else{
@@ -51,9 +44,9 @@ public class MenuActivity extends ListActivity{//AppCompatActivity {
     }
     public void Historial(View view){
         Intent intent;
-        intent = new Intent(this,HistorialActivity.class);
+        intent = new Intent(this,dataHistorial.class);
         intent.putExtra("DNI",dni);
         //intent.putExtra("DATA",data);
-        //startActivity(intent);
+        startActivity(intent);
     }
 }
