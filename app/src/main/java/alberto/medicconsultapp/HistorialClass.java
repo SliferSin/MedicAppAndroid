@@ -1,7 +1,6 @@
 package alberto.medicconsultapp;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,7 +28,7 @@ public class HistorialClass {
     /*Constructor*/
     public HistorialClass(String dni,String data){
         this.dni_paciente = dni;
-        this.data = data;
+        this.data = data + " 00:00:00";
         this.nom = "";
         this.cognoms = "";
         this.edat = 0;
@@ -66,12 +65,13 @@ public class HistorialClass {
 
 
     /*** Hace la conexión y busca los datos para terminar de rellenar el objeto historial ***/
-    public void fillHistorial(HistorialClass historial){
-        String stsql = "SELECT u.nom,u.cognoms,u.edat,h.malaltia,h.observacions" +
+    public boolean fillHistorial(HistorialClass historial){
+        String stsql = "SELECT u.nom,u.cognoms,u.edat,h.malaltia,h.observacions " +
                        "FROM tbl_historial h INNER JOIN tbl_usuari u ON(h.id_pacient = u.dni)" +
-                       "WHERe h.data = ? and h.id_pacient = ?";
+                       "WHERe h.data::date = ? and h.id_pacient = ?";
         PreparedStatement st;
         ResultSet rs;
+        boolean correcto = false;
 
         try {
             Class.forName(driverDB);
@@ -87,7 +87,9 @@ public class HistorialClass {
                 this.setEdat(rs.getInt("edat"));
                 this.setEnfermetat(rs.getString("malaltia"));
                 this.setObservacions(rs.getString("observacions"));
+                correcto = true;
             }
+            else correcto = false;
 
             st.close();
             conn.close();
@@ -96,6 +98,7 @@ public class HistorialClass {
         }catch (ClassNotFoundException e){
             System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
         }
+        return correcto;
     }
     public boolean searchHistorial(String dni, String data){
         String stsql = "SELECT * from tbl_historial WHERE id_pacient = ?";// and data = ?";

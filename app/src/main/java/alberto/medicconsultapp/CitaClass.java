@@ -88,7 +88,7 @@ public class CitaClass {
         }
     }
 
-    public String searchNearestCita(String data){ //Acomodar al estilo del searchCita
+    public String searchNearestCita(String data){
         String stsql = "select * from tbl_cita cit  " +
                         "join tbl_medicopaciente medpac on cit.dni_metge = medpac.dni_metge " +
                         "where medpac.dni_pacient = ? and cit.data > ? limit 1";
