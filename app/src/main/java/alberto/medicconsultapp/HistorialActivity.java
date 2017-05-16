@@ -59,7 +59,7 @@ public class HistorialActivity extends AppCompatActivity {
             }
             else{
                 username.setText(String.valueOf(historial.getNom()));
-                data.setText(String.valueOf(historial.getDataHistorial().substring(0,16)));
+                data.setText(String.valueOf(historial.getDataHistorial().substring(0,10)));
                 nom.setText(String.valueOf(historial.getNom()));
                 cognoms.setText(String.valueOf(historial.getCognoms()));
                 edat.setText(String.valueOf(historial.getEdat()));
@@ -72,4 +72,3 @@ public class HistorialActivity extends AppCompatActivity {
         }
     }
 }
-

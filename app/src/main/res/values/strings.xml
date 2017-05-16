@@ -6,4 +6,5 @@
     <string name="Send">Enviar</string>
     <string name="data_historial">Data:</string>
     <string name="user_historial">Historial de </string>
+    <string name="dia_historial">Dias visitados:</string>
 </resources>

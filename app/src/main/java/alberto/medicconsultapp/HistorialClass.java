@@ -101,17 +101,18 @@ public class HistorialClass {
         return correcto;
     }
     public boolean searchHistorial(String dni, String data){
-        String stsql = "SELECT * from tbl_historial WHERE id_pacient = ?";// and data = ?";
+        String stsql = "SELECT * from tbl_historial WHERE id_pacient = ? and data::date = ?";
         PreparedStatement st;
         ResultSet rs;
         boolean encontrado = false;
+        data = data + " 00:00:00";
 
         try{
             Class.forName(driverDB);
             Connection conn = DriverManager.getConnection(urlDB, userDB, passDB);
             st = conn.prepareStatement(stsql);
             st.setString(1, dni);
-            //st.setString(2,data);
+            st.setTimestamp(2, Timestamp.valueOf(data));
             rs = st.executeQuery();
 
             if(rs.next()){

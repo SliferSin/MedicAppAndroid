@@ -27,11 +27,11 @@ public class MenuActivity extends AppCompatActivity {
             dni = (String)extras.get("DNI");
             data = (String)extras.get("DATA");
             if(data==null){
-                text.setText(dni);
+                //text.setText(dni);
             }
             else{
                 //text.setText(data);
-                text.setText(data.substring(0,16));
+                text.setText("Visita: "+data.substring(0,16));
             }
         }
     }
