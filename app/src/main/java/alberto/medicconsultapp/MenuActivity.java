@@ -26,13 +26,10 @@ public class MenuActivity extends AppCompatActivity {
         if(extras != null){
             dni = (String)extras.get("DNI");
             data = (String)extras.get("DATA");
-            if(data==null){
-                //text.setText(dni);
-            }
-            else{
-                //text.setText(data);
+            if(data!=null){
                 text.setText("Visita: "+data.substring(0,16));
             }
+            else text.setVisibility(View.GONE);
         }
     }
 
@@ -46,7 +43,6 @@ public class MenuActivity extends AppCompatActivity {
         Intent intent;
         intent = new Intent(this,dataHistorial.class);
         intent.putExtra("DNI",dni);
-        //intent.putExtra("DATA",data);
         startActivity(intent);
     }
 }

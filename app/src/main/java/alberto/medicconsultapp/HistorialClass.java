@@ -63,12 +63,15 @@ public class HistorialClass {
         this.observacions = observacions;
     }
 
-
-    /*** Hace la conexión y busca los datos para terminar de rellenar el objeto historial ***/
+    /***
+     * Hace la conexión, busca los datos para rellenar el objeto historial y devuelve un bool indicando si se pudo completar
+     * @param historial
+     * @return
+     */
     public boolean fillHistorial(HistorialClass historial){
         String stsql = "SELECT u.nom,u.cognoms,u.edat,h.malaltia,h.observacions " +
                        "FROM tbl_historial h INNER JOIN tbl_usuari u ON(h.id_pacient = u.dni)" +
-                       "WHERe h.data::date = ? and h.id_pacient = ?";
+                       "WHERE h.data::date = ? and h.id_pacient = ?";
         PreparedStatement st;
         ResultSet rs;
         boolean correcto = false;
@@ -100,6 +103,13 @@ public class HistorialClass {
         }
         return correcto;
     }
+
+    /***
+     * Busca que el dni tenga una visita en data y devuelve true o false acorde al resultado
+     * @param dni
+     * @param data
+     * @return
+     */
     public boolean searchHistorial(String dni, String data){
         String stsql = "SELECT * from tbl_historial WHERE id_pacient = ? and data::date = ?";
         PreparedStatement st;

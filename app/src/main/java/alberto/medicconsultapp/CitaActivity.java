@@ -122,7 +122,7 @@ public class CitaActivity extends AppCompatActivity {
         String mes = Integer.toString(month);
         String año = Integer.toString(year);
         String fecha;
-        //String fecha = Integer.toString(year).concat("-0").concat(Integer.toString(month)).concat("-").concat(Integer.toString(day));
+
         if(month<10){
             mes = "0" + mes;
         }

@@ -192,10 +192,13 @@ public class dataHistorial extends AppCompatActivity {
         protected void onPostExecute(String[] result){
             if(result[0] != null)
                 data1.setText(result[0].substring(0,10));
+            else data1.setVisibility(View.GONE);
             if(result[1] != null)
                 data2.setText(result[1].substring(0,10));
+            else data2.setVisibility(View.GONE);
             if(result[2] != null)
                 data3.setText(result[2].substring(0,10));
+            else data3.setVisibility(View.GONE);
         }
         @Override
         protected void onPreExecute(){

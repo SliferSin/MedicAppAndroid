@@ -36,6 +36,10 @@ public class UserClass {
         this.password = password;
     }
 
+    /***
+     * Comprueba que el password almacenado en el dni del paciente corresponde con el enviado
+     * @return
+     */
     public boolean consultarLogin(){
         String stsql = "SELECT password FROM tbl_usuari WHERE dni = ?";
         PreparedStatement st; //Como PreparedStatement deja poner los valores al a variable ? antes de enviar la consulta

@@ -7,9 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-/**
- * Created by Ashto on 14/03/2017.
- */
 
 public class CitaClass {
     private String dni_Paciente;
@@ -43,6 +40,10 @@ public class CitaClass {
         this.data = data;
     }
 
+    /***
+     * Actualiza la tbl_cita con el dni del usuario que hizo la solicitud de cita
+     * @param cita
+     */
     public void setCita(CitaClass cita){
 
         String stsql = "UPDATE tbl_cita SET dni_pacient = ? where data = ?";
@@ -65,6 +66,10 @@ public class CitaClass {
         }
     }
 
+    /***
+     * Busca el médico asociado al paciente
+     * @param dni_paciente
+     */
     public void searchMedico(String dni_paciente){
         String stsql = "SELECT dni_metge FROM tbl_medicopaciente WHERE dni_pacient = ?";
         PreparedStatement st;
@@ -88,6 +93,11 @@ public class CitaClass {
         }
     }
 
+    /***
+     * Busca la fecha más cercana a la seleccionada por el usuario
+     * @param data
+     * @return
+     */
     public String searchNearestCita(String data){
         String stsql = "select * from tbl_cita cit  " +
                         "join tbl_medicopaciente medpac on cit.dni_metge = medpac.dni_metge " +
@@ -118,6 +128,12 @@ public class CitaClass {
         }
         return null;
     }
+
+    /***
+     * Busca si al fecha solicitada esta disponible
+     * @param data
+     * @return
+     */
     public Boolean searchCita(String data){
         String stsql = "select * from tbl_cita cit  " +
                        "join tbl_medicopaciente medpac on cit.dni_metge = medpac.dni_metge " +

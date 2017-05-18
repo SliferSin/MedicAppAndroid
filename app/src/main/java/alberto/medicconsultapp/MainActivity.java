@@ -7,18 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
-    private String TAG = MainActivity.class.getSimpleName();
     protected Boolean validate = false;
     protected String dni = "";
     protected String pass = "";
 
-    int mostrar = 0;
-    ProgressBar Pbar;
     EditText DNI;
     EditText Password;
     Button sendButton;
@@ -33,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         DNI = (EditText) findViewById(R.id.editDNI);
         Password = (EditText) findViewById(R.id.editPass);
         sendButton = (Button) findViewById(R.id.button);
-        Pbar = (ProgressBar) findViewById(R.id.progressBar);
     }
 
     public void Loguear(View view) {
@@ -43,13 +38,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intentMenu;
         intentMenu = new Intent(this, MenuActivity.class);
 
-        Pbar.setMax(100);
-        Pbar.setProgress(0);
-
         new HttpASync().execute("");
-
-        if (mostrar == 1)
-            Pbar.setVisibility(View.VISIBLE);
 
         if (validate) {
             intentMenu.putExtra("DNI", dni);
@@ -61,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             UserClass usuario = new UserClass(dni, pass);
-            mostrar = 1;
             validate = usuario.consultarLogin();
 
             return null;
@@ -69,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Pbar.setProgress(100);
             if (validate == false) {
                 toast2 = Toast.makeText(getApplicationContext(), "Login erroneo", Toast.LENGTH_LONG);
                 toast2.show();
