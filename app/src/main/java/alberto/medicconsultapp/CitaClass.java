@@ -42,7 +42,7 @@ public class CitaClass {
 
     /***
      * Actualiza la tbl_cita con el dni del usuario que hizo la solicitud de cita
-     * @param cita
+     * @param cita Objecto CitaClass de donde sacaremos la información
      */
     public void setCita(CitaClass cita){
 
@@ -68,7 +68,7 @@ public class CitaClass {
 
     /***
      * Busca el médico asociado al paciente
-     * @param dni_paciente
+     * @param dni_paciente String que contiene el dni del usuario
      */
     public void searchMedico(String dni_paciente){
         String stsql = "SELECT dni_metge FROM tbl_medicopaciente WHERE dni_pacient = ?";
@@ -95,7 +95,7 @@ public class CitaClass {
 
     /***
      * Busca la fecha más cercana a la seleccionada por el usuario
-     * @param data
+     * @param data String con la fecha incluida la hora
      * @return
      */
     public String searchNearestCita(String data){
@@ -131,8 +131,8 @@ public class CitaClass {
 
     /***
      * Busca si al fecha solicitada esta disponible
-     * @param data
-     * @return
+     * @param data String con la fecha a buscar
+     * @return booleano según se ha podido reservar o no
      */
     public Boolean searchCita(String data){
         String stsql = "select * from tbl_cita cit  " +

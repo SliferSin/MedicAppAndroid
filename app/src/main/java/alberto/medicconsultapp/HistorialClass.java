@@ -65,8 +65,8 @@ public class HistorialClass {
 
     /***
      * Hace la conexión, busca los datos para rellenar el objeto historial y devuelve un bool indicando si se pudo completar
-     * @param historial
-     * @return
+     * @param historial Objeto HistorialClass del cual obtendremos la fecha
+     * @return booleano conforme se pudo completar el historial o no
      */
     public boolean fillHistorial(HistorialClass historial){
         String stsql = "SELECT u.nom,u.cognoms,u.edat,h.malaltia,h.observacions " +
@@ -106,9 +106,9 @@ public class HistorialClass {
 
     /***
      * Busca que el dni tenga una visita en data y devuelve true o false acorde al resultado
-     * @param dni
-     * @param data
-     * @return
+     * @param dni String con l dni del usuario
+     * @param data String con el dia a buscar
+     * @return Booleano indicando si existe el historial
      */
     public boolean searchHistorial(String dni, String data){
         String stsql = "SELECT * from tbl_historial WHERE id_pacient = ? and data::date = ?";

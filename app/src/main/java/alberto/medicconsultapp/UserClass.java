@@ -38,7 +38,7 @@ public class UserClass {
 
     /***
      * Comprueba que el password almacenado en el dni del paciente corresponde con el enviado
-     * @return
+     * @return booleano indicando si el password enviado coincide con el almacenado
      */
     public boolean consultarLogin(){
         String stsql = "SELECT password FROM tbl_usuari WHERE dni = ?";
