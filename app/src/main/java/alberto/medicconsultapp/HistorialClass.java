@@ -21,7 +21,7 @@ public class HistorialClass {
     private String observacions;
 
     private static String driverDB= "org.postgresql.Driver";
-    private static String urlDB = "jdbc:postgresql://192.168.1.10:5432/db_TFG";
+    private static String urlDB = "jdbc:postgresql://192.168.1.13:5432/db_TFG";
     private static String userDB = "postgres";
     private static String passDB = "password";
 
@@ -137,5 +137,42 @@ public class HistorialClass {
             System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
         }
         return encontrado;
+    }
+
+    /***
+     * Buscara las 5 últimas visitas realizadas en el mes solicitado
+     * @param dni dni del usuario
+     * @param data fecha (MM/YYYY) para buscar las visitas
+     * @return String[] con la lista de las visitas encontradas
+     */
+    public String[] searchHistorialList(String dni, String data){ //Hacer consulta
+        String stsql = "";
+        PreparedStatement st;
+        ResultSet rs;
+        String[] listdays = new String[5];//Mejorar la inicialización
+        int i = 0;
+        data = data + " 00:00:00";
+
+        try{
+            Class.forName(driverDB);
+            Connection conn = DriverManager.getConnection(urlDB, userDB, passDB);
+            st = conn.prepareStatement(stsql);
+            st.setString(1, dni);
+            st.setTimestamp(2, Timestamp.valueOf(data));
+            rs = st.executeQuery();
+
+            while(rs.next() && i < 5){
+                listdays[i] = rs.getString("data");
+                i++;
+            }
+
+            st.close();
+            conn.close();
+        }catch(SQLException se){
+            System.out.println("No se puede conectar. Error: "+ se.toString());
+        }catch (ClassNotFoundException e){
+            System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
+        }
+        return listdays;
     }
 }

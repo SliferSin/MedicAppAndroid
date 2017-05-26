@@ -21,7 +21,8 @@
         <activity android:name=".MenuActivity" />
         <activity android:name=".CitaActivity" />
         <activity android:name=".HistorialActivity" />
-        <activity android:name=".dataHistorial"></activity>
+        <activity android:name=".dataHistorial" />
+        <activity android:name=".ListHistorial"></activity>
     </application>
 
 </manifest>
