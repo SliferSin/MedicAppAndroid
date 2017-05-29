@@ -9,6 +9,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
+
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,47 +18,48 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
 public class ListHistorial extends AppCompatActivity {
 
     ListView listView;
     String data;
     String dni;
-    String[] values;
+    String[] values = new String[4];
+    /*String[] values = new String[] { "Android List View",
+            "Adapter implementation",
+            "Simple List View In Android",
+            "Create List View Android",
+            "Android Example",
+            "List View Source Code",
+            "List View Array Adapter",
+            "Android Example List View"
+    };*/
+
+    boolean done = false;
+
+    ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_historial);
 
-        listView = (ListView) findViewById(R.id.listDays);
+        listView = (ListView) findViewById(R.id.list);
 
         Intent intent = getIntent();//Preparamos el objeto para obtener los datos compartidos
         Bundle extras = intent.getExtras();//Recibimos los datos del activity anterior
-        //String[] values = new String[]{"Prueba1", "Prueba2"};
 
         if (extras != null) {
             data = (String) extras.get("DATA");
             dni = (String) extras.get("DNI");
         }
 
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
-
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int itemPosition = position;
-                String itemValue = (String) listView.getItemAtPosition(position);
-
-                Toast.makeText(getApplicationContext(), "Position:" + itemPosition + " ListItem:" + itemValue, Toast.LENGTH_LONG).show();
-            }
-        });
+        new ConsultaASync().execute("");
     }
+
     public String[] BuscarFecha(String dni){
         String driverDB= "org.postgresql.Driver";
-        String urlDB = "jdbc:postgresql://192.168.1.13:5432/db_TFG";
+        String urlDB = "jdbc:postgresql://192.168.1.10:5432/db_TFG";
         String userDB = "postgres";
         String passDB = "password";
 
@@ -73,10 +76,14 @@ public class ListHistorial extends AppCompatActivity {
             st.setString(1, dni);
             rs = st.executeQuery();
 
-            while(rs.next()){
-                values[i] = rs.getString("data");
+            if(rs.next()){
+                values[i] = rs.getString("data").substring(0,10);//Quitamos la hora de la fecha (YYYY/MM/dd)
                 i++;
             }
+           /* while(rs.next()){
+                values[i] = rs.getString("data").substring(0,10);//Quitamos la hora de la fecha (YYYY/MM/dd)
+                i++;
+            }*/
             st.close();
             conn.close();
         }catch(SQLException se){
@@ -89,15 +96,30 @@ public class ListHistorial extends AppCompatActivity {
     private class ConsultaASync extends AsyncTask<String,String,String[]> {
         @Override
         protected String[] doInBackground(String... params) {
-            String[] fechas;
+            String[] fechas = new String[3];
 
-            fechas = BuscarFecha(dni);
+            BuscarFecha(dni);
+            done = true;
 
             return fechas;
         }
 
         @Override
         protected void onPostExecute(String[] result) {
+           adapter = new ArrayAdapter<String>(getApplicationContext(),
+                           android.R.layout.simple_list_item_1, android.R.id.text1, values);
+
+            listView.setAdapter(adapter);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    int itemPosition = position;
+                    String itemValue = (String) listView.getItemAtPosition(position);
+
+                    Toast.makeText(getApplicationContext(), "Position:" + itemPosition + " ListItem:" + itemValue, Toast.LENGTH_LONG).show();
+                }
+            });
         }
 
         @Override

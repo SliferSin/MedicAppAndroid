@@ -14,7 +14,7 @@ public class CitaClass {
     private String data;
 
     private static String driverDB= "org.postgresql.Driver";
-    private static String urlDB = "jdbc:postgresql://192.168.1.13:5432/db_TFG";
+    private static String urlDB = "jdbc:postgresql://192.168.1.10:5432/db_TFG";
     private static String userDB = "postgres";
     private static String passDB = "password";
 
