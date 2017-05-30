@@ -42,7 +42,7 @@ public class CitaClass {
 
     /***
      * Actualiza la tbl_cita con el dni del usuario que hizo la solicitud de cita
-     * @param cita Objecto CitaClass de donde sacaremos la información
+     * @param cita Objecto CitaClass donde sacaremos la información
      */
     public void setCita(CitaClass cita){
 

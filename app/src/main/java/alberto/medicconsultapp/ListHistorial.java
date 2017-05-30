@@ -1,22 +1,24 @@
 package alberto.medicconsultapp;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
-
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 
 public class ListHistorial extends AppCompatActivity {
@@ -24,16 +26,8 @@ public class ListHistorial extends AppCompatActivity {
     ListView listView;
     String data;
     String dni;
-    String[] values = new String[4];
-    /*String[] values = new String[] { "Android List View",
-            "Adapter implementation",
-            "Simple List View In Android",
-            "Create List View Android",
-            "Android Example",
-            "List View Source Code",
-            "List View Array Adapter",
-            "Android Example List View"
-    };*/
+    ArrayList<String>values = new ArrayList<String>();
+
 
     boolean done = false;
 
@@ -53,7 +47,6 @@ public class ListHistorial extends AppCompatActivity {
             data = (String) extras.get("DATA");
             dni = (String) extras.get("DNI");
         }
-
         new ConsultaASync().execute("");
     }
 
@@ -77,13 +70,13 @@ public class ListHistorial extends AppCompatActivity {
             rs = st.executeQuery();
 
             if(rs.next()){
-                values[i] = rs.getString("data").substring(0,10);//Quitamos la hora de la fecha (YYYY/MM/dd)
-                i++;
+                values.add(rs.getString("data").substring(0,10));//Quitamos la hora de la fecha (YYYY/MM/dd)
             }
-           /* while(rs.next()){
-                values[i] = rs.getString("data").substring(0,10);//Quitamos la hora de la fecha (YYYY/MM/dd)
-                i++;
-            }*/
+            else{
+                while(rs.next()){
+                    values.add(rs.getString("data").substring(0,10));
+                }
+            }
             st.close();
             conn.close();
         }catch(SQLException se){
@@ -91,7 +84,7 @@ public class ListHistorial extends AppCompatActivity {
         }catch (ClassNotFoundException e){
             System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
         }
-        return values;
+        return null;
     }
     private class ConsultaASync extends AsyncTask<String,String,String[]> {
         @Override
@@ -107,7 +100,7 @@ public class ListHistorial extends AppCompatActivity {
         @Override
         protected void onPostExecute(String[] result) {
            adapter = new ArrayAdapter<String>(getApplicationContext(),
-                           android.R.layout.simple_list_item_1, android.R.id.text1, values);
+                           android.R.layout.simple_list_item_1,android.R.id.text1, values);
 
             listView.setAdapter(adapter);
 
@@ -117,7 +110,14 @@ public class ListHistorial extends AppCompatActivity {
                     int itemPosition = position;
                     String itemValue = (String) listView.getItemAtPosition(position);
 
-                    Toast.makeText(getApplicationContext(), "Position:" + itemPosition + " ListItem:" + itemValue, Toast.LENGTH_LONG).show();
+                    Intent intentMenu;
+                    intentMenu = new Intent(getApplicationContext(),HistorialActivity.class);
+
+                    intentMenu.putExtra("DNI",dni);
+                    intentMenu.putExtra("DATA",itemValue);
+                    startActivity(intentMenu);
+
+                    //Toast.makeText(getApplicationContext(), "Position:" + itemPosition + " ListItem:" + itemValue, Toast.LENGTH_LONG).show();
                 }
             });
         }
