@@ -68,28 +68,4 @@ public class UserClass {
         }
         return verificado;
     }
-    public String getUserName(String dni){
-        String stsql = "SELECT nom FROM tbl_usuari WHERE dni = ?";
-        String name = "";
-        PreparedStatement st;
-        ResultSet rs;
-
-        try{
-            Class.forName(driverDB);
-            Connection conn = DriverManager.getConnection(urlDB,userDB,passDB);
-            st = conn.prepareStatement(stsql);
-            st.setString(1,this.getDni());
-
-            rs = st.executeQuery();
-            name = rs.getString("nom");
-
-            st.close();
-            conn.close();
-        }catch(SQLException se){
-            System.out.println("No se puede conectar. Error: "+ se.toString());
-        }catch (ClassNotFoundException e){
-            System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
-        }
-        return name;
-    }
 }

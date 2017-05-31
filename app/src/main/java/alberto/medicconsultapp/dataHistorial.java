@@ -56,7 +56,7 @@ public class dataHistorial extends AppCompatActivity {
         if (extras != null) {
             dni = (String) extras.get("DNI");
         }
-        new  ConsultaASync().execute(""); //Ejecutamos la consulta en 2o plano
+        //new  ConsultaASync().execute(""); //Ejecutamos la consulta en 2o plano
 
         dataHistorial.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -71,6 +71,7 @@ public class dataHistorial extends AppCompatActivity {
     public void setDate(View view){
         showDialog(999);
     }
+
     @Override
     protected Dialog onCreateDialog(int id) {
     // TODO Auto-generated method stub
@@ -109,12 +110,11 @@ public class dataHistorial extends AppCompatActivity {
     public void Consultar (View view){
         //Configuración del siguiente Activity que se abrira
         Intent intentMenu;
-        //intentMenu = new Intent(this, HistorialActivity.class);
         intentMenu = new Intent(this, ListHistorial.class);
 
         historial = new HistorialClass(dni,data);
 
-        new  DbASync().execute(""); //Ejecutamos la consulta en 2o plano
+        //new  DbASync().execute(""); //Ejecutamos la consulta en 2o plano
 
         if (validate) {
             intentMenu.putExtra("DNI", dni);
@@ -143,7 +143,7 @@ public class dataHistorial extends AppCompatActivity {
         }
     }
 
-    public String[] BuscarFecha(String dni){
+    /*public String[] BuscarFecha(String dni){
         String driverDB= "org.postgresql.Driver";
         String urlDB = "jdbc:postgresql://192.168.1.10:5432/db_TFG";
         String userDB = "postgres";
@@ -175,12 +175,12 @@ public class dataHistorial extends AppCompatActivity {
             System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
         }
         return fechas;
-    }
+    }*/
 
     /**
      * Consulta para mostrar las 3 últimas fechas para el historial
      */
-    private class ConsultaASync extends AsyncTask<String,String,String[]> {
+    /*private class ConsultaASync extends AsyncTask<String,String,String[]> {
         @Override
         protected String[] doInBackground(String ... params){
             String[] fechas;
@@ -204,5 +204,5 @@ public class dataHistorial extends AppCompatActivity {
         @Override
         protected void onPreExecute(){
         }
-    }
+    }*/
 }

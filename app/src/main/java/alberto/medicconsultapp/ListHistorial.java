@@ -1,23 +1,20 @@
 package alberto.medicconsultapp;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 
@@ -27,10 +24,7 @@ public class ListHistorial extends AppCompatActivity {
     String data;
     String dni;
     ArrayList<String>values = new ArrayList<String>();
-
-
     boolean done = false;
-
     ArrayAdapter<String> adapter;
 
     @Override
@@ -50,15 +44,15 @@ public class ListHistorial extends AppCompatActivity {
         new ConsultaASync().execute("");
     }
 
-    public String[] BuscarFecha(String dni){
-        String driverDB= "org.postgresql.Driver";
+    //public String[] BuscarFecha(String dni){
+    public String[] BuscarFecha(String dni, String data){
+        String driverDB = "org.postgresql.Driver";
         String urlDB = "jdbc:postgresql://192.168.1.10:5432/db_TFG";
         String userDB = "postgres";
         String passDB = "password";
 
-        int i = 0;
-
-        String stsql = "SELECT data from tbl_historial WHERE id_pacient = ?";
+        String stsql = "SELECT data::date from tbl_historial WHERE id_pacient = ? and date_part('year',data) = ? " +
+                       "and date_part('month',data) = ?";
         PreparedStatement st;
         ResultSet rs;
 
@@ -67,14 +61,16 @@ public class ListHistorial extends AppCompatActivity {
             Connection conn = DriverManager.getConnection(urlDB, userDB, passDB);
             st = conn.prepareStatement(stsql);
             st.setString(1, dni);
+            st.setTimestamp(2, Timestamp.valueOf(data));
+            st.setTimestamp(3, Timestamp.valueOf(data));
             rs = st.executeQuery();
 
             if(rs.next()){
-                values.add(rs.getString("data").substring(0,10));//Quitamos la hora de la fecha (YYYY/MM/dd)
+                values.add(rs.getString("data"));
             }
             else{
                 while(rs.next()){
-                    values.add(rs.getString("data").substring(0,10));
+                    values.add(rs.getString("data"));
                 }
             }
             st.close();
@@ -86,12 +82,14 @@ public class ListHistorial extends AppCompatActivity {
         }
         return null;
     }
+
     private class ConsultaASync extends AsyncTask<String,String,String[]> {
         @Override
         protected String[] doInBackground(String... params) {
             String[] fechas = new String[3];
 
-            BuscarFecha(dni);
+            //BuscarFecha(dni);
+            BuscarFecha(dni,data);
             done = true;
 
             return fechas;
