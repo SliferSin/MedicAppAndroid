@@ -14,7 +14,7 @@ public class CitaClass {
     private String data;
 
     private static String driverDB= "org.postgresql.Driver";
-    private static String urlDB = "jdbc:postgresql://192.168.1.10:5432/db_TFG";
+    private static String urlDB = "jdbc:postgresql://192.168.1.12:5432/db_TFG";
     private static String userDB = "postgres";
     private static String passDB = "password";
 
@@ -22,13 +22,7 @@ public class CitaClass {
     public String getDni_Paciente(){
         return this.dni_Paciente;
     }
-    public String getDni_Medico(){
-        return this.dni_Medico;
-    }
     public String getdata(){return this.data; }
-    public void setDni_Paciente(String dni){
-        this.dni_Paciente = dni;
-    }
     public void setDni_Medico(String dni){
         this.dni_Medico = dni;
     }

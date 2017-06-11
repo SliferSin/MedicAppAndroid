@@ -14,7 +14,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 
 
@@ -44,15 +43,13 @@ public class ListHistorial extends AppCompatActivity {
         new ConsultaASync().execute("");
     }
 
-    //public String[] BuscarFecha(String dni){
     public String[] BuscarFecha(String dni, String data){
         String driverDB = "org.postgresql.Driver";
-        String urlDB = "jdbc:postgresql://192.168.1.10:5432/db_TFG";
+        String urlDB = "jdbc:postgresql://192.168.1.12:5432/db_TFG";
         String userDB = "postgres";
         String passDB = "password";
 
-        String stsql = "SELECT data::date from tbl_historial WHERE id_pacient = ? and date_part('year',data) = ? " +
-                       "and date_part('month',data) = ?";
+        String stsql = " SELECT to_char(data::date,'YYYY-MM-dd') as data FROM tbl_historial WHERE id_pacient = ? and to_char(data,'MM-YYYY') = ?";
         PreparedStatement st;
         ResultSet rs;
 
@@ -61,8 +58,7 @@ public class ListHistorial extends AppCompatActivity {
             Connection conn = DriverManager.getConnection(urlDB, userDB, passDB);
             st = conn.prepareStatement(stsql);
             st.setString(1, dni);
-            st.setTimestamp(2, Timestamp.valueOf(data));
-            st.setTimestamp(3, Timestamp.valueOf(data));
+            st.setString(2,data);
             rs = st.executeQuery();
 
             if(rs.next()){
@@ -88,7 +84,6 @@ public class ListHistorial extends AppCompatActivity {
         protected String[] doInBackground(String... params) {
             String[] fechas = new String[3];
 
-            //BuscarFecha(dni);
             BuscarFecha(dni,data);
             done = true;
 
@@ -114,8 +109,6 @@ public class ListHistorial extends AppCompatActivity {
                     intentMenu.putExtra("DNI",dni);
                     intentMenu.putExtra("DATA",itemValue);
                     startActivity(intentMenu);
-
-                    //Toast.makeText(getApplicationContext(), "Position:" + itemPosition + " ListItem:" + itemValue, Toast.LENGTH_LONG).show();
                 }
             });
         }

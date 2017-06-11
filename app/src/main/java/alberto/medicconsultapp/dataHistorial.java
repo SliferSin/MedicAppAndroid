@@ -1,39 +1,32 @@
 package alberto.medicconsultapp;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.DatePicker;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.view.View;
-import android.os.AsyncTask; //Tareas async
-import android.widget.Toast;
 import android.widget.TextView;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Calendar;
 
 public class dataHistorial extends AppCompatActivity {
 
 
     HistorialClass historial;
-    String dni;
-    String data;
+    String dni,data;
     private Button button;
     private EditText dataHistorial;
     private TextView data1,data2,data3;
-    Toast toast2;
     private int year,month,day;
     private Calendar calendar;
-    private boolean validate = false;
 
 
     @Override
@@ -56,7 +49,6 @@ public class dataHistorial extends AppCompatActivity {
         if (extras != null) {
             dni = (String) extras.get("DNI");
         }
-        //new  ConsultaASync().execute(""); //Ejecutamos la consulta en 2o plano
 
         dataHistorial.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -75,36 +67,30 @@ public class dataHistorial extends AppCompatActivity {
     @Override
     protected Dialog onCreateDialog(int id) {
     // TODO Auto-generated method stub
-        return new DatePickerDialog(this,myDateListener, year, month, day);
-    }
-        private DatePickerDialog.OnDateSetListener myDateListener = new
-                DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker arg0,
-                                          int arg1, int arg2, int arg3) {
-                        // TODO Auto-generated method stub
-                        // arg1 = year
-                        // arg2 = month
-                        // arg3 = day
-                        showDate(arg1, arg2+1, arg3);
-                    }
-                };
-    private void showDate(int year, int month, int day) {
-        String dia = Integer.toString(day);
-        String mes = Integer.toString(month);
-        String año = Integer.toString(year);
-        String fecha;
+                DatePickerDialog dialog = new DatePickerDialog(this, AlertDialog.THEME_HOLO_DARK,
+                new DatePickerDialog.OnDateSetListener() {
 
-        if(month<10){
-            mes = "0" + mes;
-        }
-        if(day<10){
-            dia = "0" + dia;
-        }
-        fecha = año + "-" + mes + "-" + dia;
-        data = fecha;
-        //Mostrar la fecha seleccionada en el campo fecha
-        dataHistorial.setText(fecha);
+                    @Override //Mes lo coge mal
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+                        String mes = Integer.toString(monthOfYear+1);
+                        String año = Integer.toString(year);
+                        String fecha;
+
+                        if(month<10){
+                            mes = "0" + mes;
+                        }
+                        fecha = mes + "-" + año;
+                        data = fecha;
+                        //Mostrar la fecha seleccionada en el campo fecha
+                        dataHistorial.setText(fecha);
+
+                    }
+
+                }, year, month, day);
+        //Ocultamos el campo "dia" del DatePickerDialog
+        ((ViewGroup) dialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("day", "id", "android")).setVisibility(View.GONE);
+        return dialog;
     }
 
     public void Consultar (View view){
@@ -114,95 +100,9 @@ public class dataHistorial extends AppCompatActivity {
 
         historial = new HistorialClass(dni,data);
 
-        //new  DbASync().execute(""); //Ejecutamos la consulta en 2o plano
+        intentMenu.putExtra("DNI", dni);
+        intentMenu.putExtra("DATA",data);
+        startActivity(intentMenu);
 
-        if (validate) {
-            intentMenu.putExtra("DNI", dni);
-            intentMenu.putExtra("DATA",data);
-            startActivity(intentMenu);
-        }
     }
-
-    private class DbASync extends AsyncTask<String,String,String> {
-        @Override
-        protected String doInBackground(String ... params){
-            if(historial.searchHistorial(dni,data)!= false){
-                validate = true;
-            }
-            return null;
-        }
-        @Override
-        protected void onPostExecute(String result){
-            if(validate == false){
-                toast2 = Toast.makeText(getApplicationContext(),"Fecha sin historial" ,Toast.LENGTH_LONG);
-                toast2.show();
-            }
-        }
-        @Override
-        protected void onPreExecute(){
-        }
-    }
-
-    /*public String[] BuscarFecha(String dni){
-        String driverDB= "org.postgresql.Driver";
-        String urlDB = "jdbc:postgresql://192.168.1.10:5432/db_TFG";
-        String userDB = "postgres";
-        String passDB = "password";
-
-        String[] fechas = new String[3];
-        int i = 0;
-
-        String stsql = "SELECT data from tbl_historial WHERE id_pacient = ?";
-        PreparedStatement st;
-        ResultSet rs;
-
-        try{
-            Class.forName(driverDB);
-            Connection conn = DriverManager.getConnection(urlDB, userDB, passDB);
-            st = conn.prepareStatement(stsql);
-            st.setString(1, dni);
-            rs = st.executeQuery();
-
-            while(rs.next()){
-                fechas[i] = rs.getString("data");
-                i++;
-            }
-            st.close();
-            conn.close();
-        }catch(SQLException se){
-            System.out.println("No se puede conectar. Error: "+ se.toString());
-        }catch (ClassNotFoundException e){
-            System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
-        }
-        return fechas;
-    }*/
-
-    /**
-     * Consulta para mostrar las 3 últimas fechas para el historial
-     */
-    /*private class ConsultaASync extends AsyncTask<String,String,String[]> {
-        @Override
-        protected String[] doInBackground(String ... params){
-            String[] fechas;
-
-            fechas = BuscarFecha(dni);
-
-            return fechas;
-        }
-        @Override
-        protected void onPostExecute(String[] result){
-            if(result[0] != null)
-                data1.setText(result[0].substring(0,10));
-            else data1.setVisibility(View.GONE);
-            if(result[1] != null)
-                data2.setText(result[1].substring(0,10));
-            else data2.setVisibility(View.GONE);
-            if(result[2] != null)
-                data3.setText(result[2].substring(0,10));
-            else data3.setVisibility(View.GONE);
-        }
-        @Override
-        protected void onPreExecute(){
-        }
-    }*/
 }

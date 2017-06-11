@@ -21,7 +21,7 @@ public class HistorialClass {
     private String observacions;
 
     private static String driverDB= "org.postgresql.Driver";
-    private static String urlDB = "jdbc:postgresql://192.168.1.10:5432/db_TFG";
+    private static String urlDB = "jdbc:postgresql://192.168.1.12:5432/db_TFG";
     private static String userDB = "postgres";
     private static String passDB = "password";
 
@@ -102,40 +102,5 @@ public class HistorialClass {
             System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
         }
         return correcto;
-    }
-
-    /***
-     * Busca que el dni tenga una visita en data y devuelve true o false acorde al resultado
-     * @param dni String con l dni del usuario
-     * @param data String con el dia a buscar
-     * @return Booleano indicando si existe el historial
-     */
-    public boolean searchHistorial(String dni, String data){
-        String stsql = "SELECT * from tbl_historial WHERE id_pacient = ? and data::date = ?";
-        PreparedStatement st;
-        ResultSet rs;
-        boolean encontrado = false;
-        data = data + " 00:00:00";
-
-        try{
-            Class.forName(driverDB);
-            Connection conn = DriverManager.getConnection(urlDB, userDB, passDB);
-            st = conn.prepareStatement(stsql);
-            st.setString(1, dni);
-            st.setTimestamp(2, Timestamp.valueOf(data));
-            rs = st.executeQuery();
-
-            if(rs.next()){
-                encontrado = true;
-            }
-
-            st.close();
-            conn.close();
-        }catch(SQLException se){
-            System.out.println("No se puede conectar. Error: "+ se.toString());
-        }catch (ClassNotFoundException e){
-            System.out.println("No se encuentra la classe. Error: "+ e.getMessage());
-        }
-        return encontrado;
     }
 }
