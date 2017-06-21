@@ -36,9 +36,6 @@ public class dataHistorial extends AppCompatActivity {
 
         button = (Button)findViewById(R.id.Consultar);
         dataHistorial = (EditText)findViewById(R.id.DataHistorial);
-        data1 = (TextView)findViewById(R.id.data1);
-        data2 = (TextView)findViewById(R.id.data2);
-        data3 = (TextView)findViewById(R.id.data3);
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
