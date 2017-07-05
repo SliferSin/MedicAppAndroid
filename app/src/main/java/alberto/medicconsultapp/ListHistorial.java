@@ -45,7 +45,7 @@ public class ListHistorial extends AppCompatActivity {
 
     public String[] BuscarFecha(String dni, String data){
         String driverDB = "org.postgresql.Driver";
-        String urlDB = "jdbc:postgresql://192.168.1.12:5432/db_TFG";
+        String urlDB = "jdbc:postgresql://192.168.1.10:5432/db_TFG";
         String userDB = "postgres";
         String passDB = "password";
 
@@ -61,13 +61,14 @@ public class ListHistorial extends AppCompatActivity {
             st.setString(2,data);
             rs = st.executeQuery();
 
-            if(rs.next()){
+            if(!rs.next()){
                 values.add(rs.getString("data"));
             }
             else{
                 while(rs.next()){
                     values.add(rs.getString("data"));
                 }
+                values.add(rs.getString("data"));
             }
             st.close();
             conn.close();
