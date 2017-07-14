@@ -144,7 +144,7 @@ public class CitaActivity extends AppCompatActivity {
         cita = new CitaClass(dni,data);
         new  DbASync().execute(""); //Ejecutamos la consulta en 2o plano
 
-        if (validate) {
+        if(validate) {
             intentMenu.putExtra("DNI", dni);
             intentMenu.putExtra("DATA",cita.getdata());
             startActivity(intentMenu);
@@ -157,6 +157,7 @@ public class CitaActivity extends AppCompatActivity {
             cita.searchMedico(cita.getDni_Paciente()); //Obtenemos el dni del médico asignado
             if(cita.searchCita(data)){
                 completo = true;
+                validate = true;
                 //Si la fecha esta disponible
                 cita.setCita(cita);
             }
@@ -168,8 +169,7 @@ public class CitaActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result){
             if(completo == true){
-                toast2 = Toast.makeText(getApplicationContext(),"Fecha reservada",Toast.LENGTH_LONG);
-                validate = true; //Activamos la señal para pasar al siguiente activity
+                toast2 = Toast.makeText(getApplicationContext(),"Fecha reservada",Toast.LENGTH_SHORT);
                 toast2.show();
             }
             else{

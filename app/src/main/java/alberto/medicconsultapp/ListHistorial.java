@@ -49,7 +49,7 @@ public class ListHistorial extends AppCompatActivity {
         String userDB = "postgres";
         String passDB = "password";
 
-        String stsql = " SELECT to_char(data::date,'YYYY-MM-dd') as data FROM tbl_historial WHERE id_pacient = ? and to_char(data,'MM-YYYY') = ?";
+        String stsql = " SELECT to_char(data::date,'YYYY-MM-dd') as data FROM tbl_historial WHERE id_pacient = ? and to_char(data,'MM-YYYY') = ? order by data";
         PreparedStatement st;
         ResultSet rs;
 
@@ -65,10 +65,11 @@ public class ListHistorial extends AppCompatActivity {
                 values.add(rs.getString("data"));
             }
             else{
+                values.add(rs.getString("data"));
                 while(rs.next()){
                     values.add(rs.getString("data"));
                 }
-                values.add(rs.getString("data"));
+
             }
             st.close();
             conn.close();
